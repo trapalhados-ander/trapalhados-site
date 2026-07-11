@@ -229,6 +229,22 @@
         z-index: 100 !important;
     }
 
+    /* Custom Scrollbar - Projectile Style */
+    ::-webkit-scrollbar {
+        width: 12px;
+    }
+    ::-webkit-scrollbar-track {
+        background: #111418;
+    }
+    ::-webkit-scrollbar-thumb {
+        background: #F2A900;
+        border-radius: 10px;
+        background-image: linear-gradient(to bottom, #d48806, #F2A900, #d48806);
+        border: 2px solid #111418;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+        background-image: linear-gradient(to bottom, #f5b927, #f7c954, #f5b927);
+    }
 </style>
 </head>
 <body class="font-body-md antialiased relative selection:bg-primary-container selection:text-on-primary-container">
@@ -319,7 +335,9 @@ void main() {
 <nav class="fixed top-0 w-full z-50 flex justify-between items-center px-margin-mobile md:px-margin-desktop h-20 border-b border-primary/20 bg-surface/80 backdrop-blur-xl shadow-[0_0_15px_rgba(242,169,0,0.2)]">
     <div class="flex items-center gap-4">
         <!-- REDUNDANT TEXT REMOVED -->
-        <img src="brand/Logo.png" alt="Trapalhados Logo" class="w-16 h-16 object-contain hidden md:block">
+        <a href="#" class="cursor-pointer">
+            <img src="brand/logo_ingles.png" alt="Trapalhados Logo" class="w-16 h-16 object-contain hidden md:block">
+        </a>
     </div>
     
     <div class="hidden md:flex gap-6 items-center">
@@ -341,12 +359,12 @@ void main() {
         </div>
 
         <!-- Bandeirinhas -->
-        <div class="flex items-center">
-            <a href="/" class="flex items-center gap-2 px-2 py-1 rounded transition-colors opacity-50 hover:opacity-100 hover:bg-surface-variant/50" title="PT-BR">
-                <span class="text-xl">🇧🇷</span>
+        <div class="flex items-center gap-2">
+            <a href="/" class="flex items-center justify-center w-7 h-5 md:w-8 md:h-6 rounded-sm overflow-hidden opacity-50 hover:opacity-100 transition-opacity" title="PT-BR">
+                <img src="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/4.1.5/flags/4x3/br.svg" alt="BR" class="w-full h-full object-cover">
             </a>
-            <a href="/en.html" class="flex items-center gap-2 px-2 py-1 rounded transition-colors bg-surface-variant" title="EN-US">
-                <span class="text-xl">🇺🇸</span>
+            <a href="/en.html" class="flex items-center justify-center w-7 h-5 md:w-8 md:h-6 rounded-sm overflow-hidden opacity-100 ring-2 ring-primary transition-opacity" title="EN-US">
+                <img src="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/4.1.5/flags/4x3/us.svg" alt="US" class="w-full h-full object-cover">
             </a>
         </div>
 
@@ -372,12 +390,12 @@ void main() {
                 <div class="tilt-element relative w-full h-[350px] md:h-[500px]" style="transform-style: preserve-3d;">
                     
                     <!-- Squad Dinâmico (V-Formation) -->
-                    <div id="dynamic-squad" class="absolute inset-0 w-full h-full flex items-end justify-center -space-x-12 md:-space-x-20 pb-4" style="transform: translateZ(40px);">
+                    <div id="dynamic-squad" class="absolute inset-0 w-full h-full flex items-end justify-center -space-x-16 md:-space-x-32 pb-4" style="transform: translateZ(40px);">
                         <!-- Personagens inseridos via JS -->
                     </div>
 
                     <!-- Logo superior centralizado -->
-                    <img src="brand/Logo.png" alt="Logo Trapalhados" class="absolute top-0 left-1/2 w-64 md:w-[350px] drop-shadow-[0_15px_25px_rgba(0,0,0,0.9)]" style="transform: translate(-50%, -60%) translateZ(90px);">
+                    <img src="brand/logo_ingles.png" alt="Logo Trapalhados" class="absolute top-0 left-1/2 w-64 md:w-[350px] drop-shadow-[0_15px_25px_rgba(0,0,0,0.9)]" style="transform: translate(-50%, -60%) translateZ(90px);">
                 </div>
             </div>
             
@@ -911,5 +929,27 @@ void main() {
     });
 
 </script>
+
+<!-- Botão Flutuante de Compartilhar (Convite Discord) -->
+<button onclick="copyInvite()" class="fixed bottom-6 right-6 z-50 bg-primary text-on-primary w-14 h-14 rounded-full shadow-[0_0_15px_rgba(242,169,0,0.5)] hover:scale-110 hover:bg-primary-container transition-all flex items-center justify-center group" title="Copy Invite">
+    <span class="material-symbols-outlined text-2xl font-bold">share</span>
+    <span id="copy-tooltip" class="absolute right-full mr-4 bg-surface-variant px-3 py-1 rounded font-label-sm text-on-surface opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none uppercase border border-primary/20">Copy Discord Invite</span>
+</button>
+
+<script>
+    function copyInvite() {
+        navigator.clipboard.writeText("https://discord.gg/SfWJPGzV93").then(() => {
+            const tooltip = document.getElementById('copy-tooltip');
+            const originalText = tooltip.innerText;
+            tooltip.innerText = "Copied!";
+            tooltip.classList.add('text-primary');
+            setTimeout(() => {
+                tooltip.innerText = originalText;
+                tooltip.classList.remove('text-primary');
+            }, 2000);
+        });
+    }
+</script>
+
 </body>
 </html>
