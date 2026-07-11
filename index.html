@@ -933,20 +933,21 @@ void main() {
 <!-- Botão Flutuante de Compartilhar (Convite Discord) -->
 <button onclick="copyInvite()" class="fixed bottom-6 right-6 z-50 bg-primary text-on-primary w-14 h-14 rounded-full shadow-[0_0_15px_rgba(242,169,0,0.5)] hover:scale-110 hover:bg-primary-container transition-all flex items-center justify-center group" title="Copiar Convite">
     <span class="material-symbols-outlined text-2xl font-bold">share</span>
-    <span id="copy-tooltip" class="absolute right-full mr-4 bg-surface-variant px-3 py-1 rounded font-label-sm text-on-surface opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none uppercase border border-primary/20">Copiar Convite Discord</span>
+    <span class="absolute right-full mr-4 bg-surface-variant p-3 rounded font-label-sm text-on-surface opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none border border-primary/20 flex flex-col gap-1 w-[280px] text-left">
+        <strong id="tooltip-title" class="uppercase text-primary whitespace-nowrap">Copiar Convite Discord</strong>
+        <span class="text-xs text-on-surface-variant font-normal normal-case leading-tight">Vem ver esse clã de PUBG! Rucha torto, banga errado. Entra aí no QG dos Trapalhados: https://discord.gg/SfWJPGzV93</span>
+    </span>
 </button>
 
 <script>
     function copyInvite() {
         const shareText = "Vem ver esse clã de PUBG! Rucha torto, banga errado. Entra aí no QG dos Trapalhados: https://discord.gg/SfWJPGzV93";
         navigator.clipboard.writeText(shareText).then(() => {
-            const tooltip = document.getElementById('copy-tooltip');
-            const originalText = tooltip.innerText;
-            tooltip.innerText = "Copiado!";
-            tooltip.classList.add('text-primary');
+            const tooltipTitle = document.getElementById('tooltip-title');
+            const originalText = tooltipTitle.innerText;
+            tooltipTitle.innerText = "COPIADO!";
             setTimeout(() => {
-                tooltip.innerText = originalText;
-                tooltip.classList.remove('text-primary');
+                tooltipTitle.innerText = originalText;
             }, 2000);
         });
     }
