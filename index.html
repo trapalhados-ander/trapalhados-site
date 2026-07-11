@@ -663,18 +663,26 @@ void main() {
                 </h2>
             </div>
             
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div id="clips-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Fallback Clip -->
                 <div class="glass-card rounded-lg overflow-hidden group cursor-pointer reveal">
                     <div class="relative aspect-video overflow-hidden">
                         <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDO7cnOD7QcsbnxnUerehlfdjwzB0iGJsabtwX9d4G04vK_SqUrxsCHzUNLFL9k3h5X78ChTImEb9RDjxKqY5dcP_vp7rbfmicfjc6HF96PgPnpFbD0norDZAGBXQZpwOO-bPLb3C7kcmXHEW9RLXc36aUi3MkC-ah0I8a30VAMFJnag55c5CpWnNfFLcc1A5GhIso03qv4gAk2v-nMSQW7db9OZbQ8iU79c-tvPzv3aBaxMl440NKi1Srk5NGEdcq7F_pOrWw5EhI"/>
                         <div class="absolute inset-0 bg-black/40 flex items-center justify-center"><div class="w-16 h-16 rounded-full bg-primary-container/80 flex items-center justify-center backdrop-blur-sm"><span class="material-symbols-outlined text-[32px] text-on-primary-container" style="font-variation-settings: 'FILL' 1;">play_arrow</span></div></div>
-                        <div class="absolute top-4 left-4 bg-surface-variant text-primary font-label-sm px-3 py-1 rounded-sm border-l-2 border-primary uppercase shadow-md flex items-center gap-2"> PANELAÇO </div>
+                        <div class="absolute top-4 left-4 bg-surface-variant text-primary font-label-sm px-3 py-1 rounded-sm border-l-2 border-primary uppercase shadow-md flex items-center gap-2"> CLÁSSICO </div>
                     </div>
                     <div class="p-6">
                         <h3 class="font-headline-md text-[20px] text-on-surface uppercase mb-2">Pânico de Panela em Pochinki</h3>
-                        <p class="font-body-md text-on-surface-variant text-sm">Quando o esquadrão inteiro cai no mesmo teto e só acha panela.</p>
+                        <p class="font-body-md text-on-surface-variant text-sm">Enviado por: Tripa Seca</p>
                     </div>
                 </div>
+            </div>
+
+            <!-- Botão de Carregar Mais -->
+            <div id="clips-load-more-container" class="mt-12 text-center hidden">
+                <button id="clips-load-more-btn" class="bg-primary/20 hover:bg-primary text-primary hover:text-on-primary transition-colors px-6 py-3 rounded uppercase font-bold tracking-wider border border-primary/50 cursor-pointer">
+                    CARREGAR MAIS
+                </button>
             </div>
         </div>
     </section>
@@ -859,6 +867,65 @@ void main() {
                 }
             })
             .catch(err => console.log('Discord widget indisponível:', err));
+    });
+
+    // Dynamic Clips Loading via Discord
+    document.addEventListener('DOMContentLoaded', () => {
+        const grid = document.getElementById('clips-grid');
+        const loadMoreBtn = document.getElementById('clips-load-more-btn');
+        const loadMoreContainer = document.getElementById('clips-load-more-container');
+        
+        let allClips = [];
+        let currentlyDisplayed = 0;
+        const CLIPS_PER_PAGE = 6;
+
+        function renderClips(startIndex, count) {
+            const clipsToRender = allClips.slice(startIndex, startIndex + count);
+            
+            clipsToRender.forEach(clip => {
+                const card = document.createElement('div');
+                card.className = 'glass-card rounded-lg overflow-hidden group reveal active';
+                
+                // HTML do vídeo em loop silencioso
+                card.innerHTML = `
+                    <div class="relative aspect-video bg-black overflow-hidden border-b border-primary/20">
+                        <video class="w-full h-full object-cover" controls preload="metadata" poster="brand/1.png">
+                            <source src="${clip.videoUrl}" type="video/mp4">
+                        </video>
+                        <div class="absolute top-4 left-4 bg-surface-variant text-primary font-label-sm px-3 py-1 rounded-sm border-l-2 border-primary uppercase shadow-md flex items-center gap-2 pointer-events-none"> NOVA VERGONHA </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="font-headline-md text-[20px] text-on-surface uppercase mb-2 line-clamp-2">${clip.title}</h3>
+                        <p class="font-body-md text-on-surface-variant text-sm font-bold text-primary">Enviado por: ${clip.author}</p>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+
+            currentlyDisplayed += clipsToRender.length;
+
+            // Mostra ou esconde o botão de carregar mais
+            if (currentlyDisplayed < allClips.length) {
+                loadMoreContainer.classList.remove('hidden');
+            } else {
+                loadMoreContainer.classList.add('hidden');
+            }
+        }
+
+        fetch('/.netlify/functions/clips')
+            .then(res => res.json())
+            .then(data => {
+                if (data && data.clips && data.clips.length > 0) {
+                    allClips = data.clips;
+                    grid.innerHTML = ''; // Limpa o fallback
+                    renderClips(0, CLIPS_PER_PAGE);
+                }
+            })
+            .catch(err => console.error("Erro ao carregar clipes:", err));
+
+        loadMoreBtn.addEventListener('click', () => {
+            renderClips(currentlyDisplayed, CLIPS_PER_PAGE);
+        });
     });
 
 </script>
