@@ -399,150 +399,12 @@ void main() {
                 O Esquadrão
             </h2>
             
-            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
-                <!-- 1. Ander -->
-                <div class="glass-card rounded-lg p-6 flex flex-col items-center gap-4 text-center reveal border-t-4 border-t-primary tilt-wrapper">
-                    <div class="tilt-element">
-                        <div class="w-32 h-32 rounded-full bg-surface-variant mb-4 flex items-center justify-center shadow-lg border-2 border-primary/50 overflow-hidden mx-auto"><span class="material-symbols-outlined text-[64px] text-on-surface-variant">person</span></div>
-                        <h3 class="font-headline-md text-[24px] text-on-surface uppercase drop-shadow-md">Ander</h3>
-                        <div class="bg-surface-variant text-primary font-label-sm px-2 py-1 rounded uppercase inline-block mb-4">Capitão do Caos</div>
-                        <ul class="text-left font-body-md text-sm text-on-surface-variant space-y-2 w-full border-t border-surface-variant pt-4">
-                            <li><strong class="text-on-surface">KD:</strong> 0.2</li>
-                            <li><strong class="text-on-surface">Arma:</strong> Panela / UZI</li>
-                        </ul>
-                    </div>
+            <div id="members-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+                <!-- Loading State -->
+                <div class="col-span-full glass-card rounded-lg p-12 flex flex-col items-center justify-center gap-4 text-center border-t-4 border-t-primary">
+                    <span class="material-symbols-outlined text-[48px] animate-spin text-primary">sync</span>
+                    <p class="font-body-md text-on-surface-variant uppercase tracking-widest">Carregando Esquadrão do Discord...</p>
                 </div>
-
-                <!-- 2. Tripa Seca -->
-                <div class="glass-card rounded-lg p-6 flex flex-col items-center gap-4 text-center reveal border-t-4 border-t-error tilt-wrapper">
-                    <div class="tilt-element">
-                        <div class="w-32 h-32 rounded-full bg-surface-variant mb-4 flex items-center justify-center shadow-lg border-2 border-error/50 overflow-hidden mx-auto"><span class="material-symbols-outlined text-[64px] text-on-surface-variant">person</span></div>
-                        <h3 class="font-headline-md text-[24px] text-on-surface uppercase drop-shadow-md">Tripa Seca</h3>
-                        <div class="bg-surface-variant text-error font-label-sm px-2 py-1 rounded uppercase inline-block mb-4">Mestre do Capote</div>
-                        <ul class="text-left font-body-md text-sm text-on-surface-variant space-y-2 w-full border-t border-surface-variant pt-4">
-                            <li><strong class="text-on-surface">KD:</strong> -1 (Se mata)</li>
-                            <li><strong class="text-on-surface">Arma:</strong> Dacia Voador</li>
-                        </ul>
-                    </div>
-                </div>
-
-                <!-- 3. Alexandre -->
-                <div class="glass-card rounded-lg p-6 flex flex-col items-center gap-4 text-center reveal border-t-4 border-t-tertiary tilt-wrapper">
-                    <div class="tilt-element">
-                        <div class="w-32 h-32 rounded-full bg-surface-variant mb-4 flex items-center justify-center shadow-lg border-2 border-tertiary/50 overflow-hidden mx-auto"><span class="material-symbols-outlined text-[64px] text-on-surface-variant">person</span></div>
-                        <h3 class="font-headline-md text-[24px] text-on-surface uppercase drop-shadow-md">Alexandre</h3>
-                        <div class="bg-surface-variant text-tertiary font-label-sm px-2 py-1 rounded uppercase inline-block mb-4">Looter Profissional</div>
-                        <ul class="text-left font-body-md text-sm text-on-surface-variant space-y-2 w-full border-t border-surface-variant pt-4">
-                            <li><strong class="text-on-surface">KD:</strong> 0.4</li>
-                            <li><strong class="text-on-surface">Arma:</strong> Mochila Nível 3</li>
-                        </ul>
-                    </div>
-                </div>
-
-                <!-- 4. Gui -->
-                <div class="glass-card rounded-lg p-6 flex flex-col items-center gap-4 text-center reveal border-t-4 border-t-primary tilt-wrapper">
-                    <div class="tilt-element">
-                        <div class="w-32 h-32 rounded-full bg-surface-variant mb-4 flex items-center justify-center shadow-lg border-2 border-primary/50 overflow-hidden mx-auto"><span class="material-symbols-outlined text-[64px] text-on-surface-variant">person</span></div>
-                        <h3 class="font-headline-md text-[24px] text-on-surface uppercase drop-shadow-md">Gui</h3>
-                        <div class="bg-surface-variant text-primary font-label-sm px-2 py-1 rounded uppercase inline-block mb-4">O Sumido</div>
-                        <ul class="text-left font-body-md text-sm text-on-surface-variant space-y-2 w-full border-t border-surface-variant pt-4">
-                            <li><strong class="text-on-surface">KD:</strong> 0.1</li>
-                            <li><strong class="text-on-surface">Arma:</strong> VSS (Erra tudo)</li>
-                        </ul>
-                    </div>
-                </div>
-
-                <!-- 5. Nim -->
-                <div class="glass-card rounded-lg p-6 flex flex-col items-center gap-4 text-center reveal border-t-4 border-t-error tilt-wrapper">
-                    <div class="tilt-element">
-                        <div class="w-32 h-32 rounded-full bg-surface-variant mb-4 flex items-center justify-center shadow-lg border-2 border-error/50 overflow-hidden mx-auto"><span class="material-symbols-outlined text-[64px] text-on-surface-variant">person</span></div>
-                        <h3 class="font-headline-md text-[24px] text-on-surface uppercase drop-shadow-md">Nim</h3>
-                        <div class="bg-surface-variant text-error font-label-sm px-2 py-1 rounded uppercase inline-block mb-4">Kamikaze</div>
-                        <ul class="text-left font-body-md text-sm text-on-surface-variant space-y-2 w-full border-t border-surface-variant pt-4">
-                            <li><strong class="text-on-surface">KD:</strong> 0.8 (Bom até)</li>
-                            <li><strong class="text-on-surface">Arma:</strong> C4 + Moto</li>
-                        </ul>
-                    </div>
-                </div>
-
-                <!-- 6. Lucaum -->
-                <div class="glass-card rounded-lg p-6 flex flex-col items-center gap-4 text-center reveal border-t-4 border-t-tertiary tilt-wrapper">
-                    <div class="tilt-element">
-                        <div class="w-32 h-32 rounded-full bg-surface-variant mb-4 flex items-center justify-center shadow-lg border-2 border-tertiary/50 overflow-hidden mx-auto"><span class="material-symbols-outlined text-[64px] text-on-surface-variant">person</span></div>
-                        <h3 class="font-headline-md text-[24px] text-on-surface uppercase drop-shadow-md">Lucaum</h3>
-                        <div class="bg-surface-variant text-tertiary font-label-sm px-2 py-1 rounded uppercase inline-block mb-4">Isca Oficial</div>
-                        <ul class="text-left font-body-md text-sm text-on-surface-variant space-y-2 w-full border-t border-surface-variant pt-4">
-                            <li><strong class="text-on-surface">KD:</strong> 0.05</li>
-                            <li><strong class="text-on-surface">Arma:</strong> Grito no Discord</li>
-                        </ul>
-                    </div>
-                </div>
-
-                <!-- 7. Diguuh -->
-                <div class="glass-card rounded-lg p-6 flex flex-col items-center gap-4 text-center reveal border-t-4 border-t-primary tilt-wrapper">
-                    <div class="tilt-element">
-                        <div class="w-32 h-32 rounded-full bg-surface-variant mb-4 flex items-center justify-center shadow-lg border-2 border-primary/50 overflow-hidden mx-auto"><span class="material-symbols-outlined text-[64px] text-on-surface-variant">person</span></div>
-                        <h3 class="font-headline-md text-[24px] text-on-surface uppercase drop-shadow-md">Diguuh</h3>
-                        <div class="bg-surface-variant text-primary font-label-sm px-2 py-1 rounded uppercase inline-block mb-4">Sniper Cego</div>
-                        <ul class="text-left font-body-md text-sm text-on-surface-variant space-y-2 w-full border-t border-surface-variant pt-4">
-                            <li><strong class="text-on-surface">KD:</strong> 0.3</li>
-                            <li><strong class="text-on-surface">Arma:</strong> Kar98 (Atira no vento)</li>
-                        </ul>
-                    </div>
-                </div>
-
-                <!-- 8. Vini -->
-                <div class="glass-card rounded-lg p-6 flex flex-col items-center gap-4 text-center reveal border-t-4 border-t-error tilt-wrapper">
-                    <div class="tilt-element">
-                        <div class="w-32 h-32 rounded-full bg-surface-variant mb-4 flex items-center justify-center shadow-lg border-2 border-error/50 overflow-hidden mx-auto"><span class="material-symbols-outlined text-[64px] text-on-surface-variant">person</span></div>
-                        <h3 class="font-headline-md text-[24px] text-on-surface uppercase drop-shadow-md">Vini</h3>
-                        <div class="bg-surface-variant text-error font-label-sm px-2 py-1 rounded uppercase inline-block mb-4">Colecionador de Redzone</div>
-                        <ul class="text-left font-body-md text-sm text-on-surface-variant space-y-2 w-full border-t border-surface-variant pt-4">
-                            <li><strong class="text-on-surface">KD:</strong> 0.2</li>
-                            <li><strong class="text-on-surface">Arma:</strong> Imã de Bomba</li>
-                        </ul>
-                    </div>
-                </div>
-
-                <!-- 9. MTzinn -->
-                <div class="glass-card rounded-lg p-6 flex flex-col items-center gap-4 text-center reveal border-t-4 border-t-tertiary tilt-wrapper">
-                    <div class="tilt-element">
-                        <div class="w-32 h-32 rounded-full bg-surface-variant mb-4 flex items-center justify-center shadow-lg border-2 border-tertiary/50 overflow-hidden mx-auto"><span class="material-symbols-outlined text-[64px] text-on-surface-variant">person</span></div>
-                        <h3 class="font-headline-md text-[24px] text-on-surface uppercase drop-shadow-md">MTzinn</h3>
-                        <div class="bg-surface-variant text-tertiary font-label-sm px-2 py-1 rounded uppercase inline-block mb-4">O Atrasado</div>
-                        <ul class="text-left font-body-md text-sm text-on-surface-variant space-y-2 w-full border-t border-surface-variant pt-4">
-                            <li><strong class="text-on-surface">KD:</strong> 0.6</li>
-                            <li><strong class="text-on-surface">Arma:</strong> Lootear morto</li>
-                        </ul>
-                    </div>
-                </div>
-
-                <!-- 10. Faisca -->
-                <div class="glass-card rounded-lg p-6 flex flex-col items-center gap-4 text-center reveal border-t-4 border-t-primary tilt-wrapper">
-                    <div class="tilt-element">
-                        <div class="w-32 h-32 rounded-full bg-surface-variant mb-4 flex items-center justify-center shadow-lg border-2 border-primary/50 overflow-hidden mx-auto"><span class="material-symbols-outlined text-[64px] text-on-surface-variant">person</span></div>
-                        <h3 class="font-headline-md text-[24px] text-on-surface uppercase drop-shadow-md">Faisca</h3>
-                        <div class="bg-surface-variant text-primary font-label-sm px-2 py-1 rounded uppercase inline-block mb-4">Rei do Fogo Amigo</div>
-                        <ul class="text-left font-body-md text-sm text-on-surface-variant space-y-2 w-full border-t border-surface-variant pt-4">
-                            <li><strong class="text-on-surface">KD:</strong> 1.0 (Só em aliados)</li>
-                            <li><strong class="text-on-surface">Arma:</strong> Molotov</li>
-                        </ul>
-                    </div>
-                </div>
-
-                <!-- 11. Rafael -->
-                <div class="glass-card rounded-lg p-6 flex flex-col items-center gap-4 text-center reveal border-t-4 border-t-error tilt-wrapper">
-                    <div class="tilt-element">
-                        <div class="w-32 h-32 rounded-full bg-surface-variant mb-4 flex items-center justify-center shadow-lg border-2 border-error/50 overflow-hidden mx-auto"><span class="material-symbols-outlined text-[64px] text-on-surface-variant">person</span></div>
-                        <h3 class="font-headline-md text-[24px] text-on-surface uppercase drop-shadow-md">Rafael</h3>
-                        <div class="bg-surface-variant text-error font-label-sm px-2 py-1 rounded uppercase inline-block mb-4">Motorista Uber</div>
-                        <ul class="text-left font-body-md text-sm text-on-surface-variant space-y-2 w-full border-t border-surface-variant pt-4">
-                            <li><strong class="text-on-surface">KD:</strong> 0.1</li>
-                            <li><strong class="text-on-surface">Arma:</strong> Buzina da UAZ</li>
-                        </ul>
-                    </div>
-                </div>
-
             </div>
         </div>
     </section>
@@ -771,22 +633,70 @@ void main() {
         
         setTimeout(() => {
             if(mapName === 'erangel') {
-                title.innerText = "Pochinki (Erangel)";
+                title.innerText = "Gatka (Erangel)";
                 title.className = "font-headline-md text-[28px] uppercase mb-2 text-primary";
-                desc.innerText = "A gente cai no celeiro, todo mundo pega uma pistola, e 30 segundos depois voltamos pro lobby. Clássico.";
+                desc.innerText = "A gente cai em Gatka, só acha Besta, Catana e uma pistola e, 30 segundos depois, voltamos para o lobby. Clássico.";
             } else if(mapName === 'miramar') {
-                title.innerText = "Pecado (Miramar)";
+                title.innerText = "Power Grid (Miramar)";
                 title.className = "font-headline-md text-[28px] uppercase mb-2 text-error";
-                desc.innerText = "A promessa é dominar o cassino ou o ginásio. A realidade é morrer pro primeiro cara com uma Win94.";
+                desc.innerText = "A promessa é dominar Power Grid. A realidade é morrer para o primeiro cara dando spray de UZI.";
             } else if(mapName === 'sanhok') {
-                title.innerText = "Bootcamp (Sanhok)";
+                title.innerText = "Ruins (Sanhok)";
                 title.className = "font-headline-md text-[28px] uppercase mb-2 text-tertiary";
-                desc.innerText = "Não sei porque a gente clica nesse mapa. É pular, ouvir passos em cima, embaixo, do lado, e chorar.";
+                desc.innerText = "Nós caímos em Ruins pois o nome já diz tudo.";
             }
             resultBox.classList.remove('opacity-0');
             resultBox.classList.add('opacity-100');
         }, 100);
     }
+
+    // Carregar Membros dinamicamente do Discord
+    function loadMembers() {
+        const grid = document.getElementById('members-grid');
+        fetch('/.netlify/functions/members')
+            .then(res => res.json())
+            .then(data => {
+                if (data.members && data.members.length > 0) {
+                    grid.innerHTML = '';
+                    const borderColors = ['border-t-primary', 'border-t-error', 'border-t-tertiary'];
+                    const textColors = ['text-primary', 'text-error', 'text-tertiary'];
+
+                    data.members.forEach((member, index) => {
+                        const bColor = borderColors[index % 3];
+                        const tColor = textColors[index % 3];
+                        
+                        const imageHTML = member.imageUrl 
+                            ? `<div class="w-32 h-32 rounded-full mb-4 mx-auto overflow-hidden shadow-lg border-2 border-primary/50"><img src="${member.imageUrl}" class="w-full h-full object-cover"></div>` 
+                            : `<div class="w-32 h-32 rounded-full bg-surface-variant mb-4 flex items-center justify-center shadow-lg border-2 border-primary/50 overflow-hidden mx-auto"><span class="material-symbols-outlined text-[64px] text-on-surface-variant">person</span></div>`;
+
+                        grid.innerHTML += `
+                            <div class="glass-card rounded-lg p-6 flex flex-col items-center gap-4 text-center border-t-4 ${bColor}">
+                                <div>
+                                    ${imageHTML}
+                                    <h3 class="font-headline-md text-[24px] text-on-surface uppercase drop-shadow-md">${member.nome}</h3>
+                                    <div class="bg-surface-variant ${tColor} font-label-sm px-2 py-1 rounded uppercase inline-block mb-4">${member.funcao}</div>
+                                    <ul class="text-left font-body-md text-sm text-on-surface-variant space-y-2 w-full border-t border-surface-variant pt-4">
+                                        <li><strong class="text-on-surface">KD:</strong> ${member.kd}</li>
+                                        <li><strong class="text-on-surface">Arma:</strong> ${member.arma}</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        `;
+                    });
+                } else {
+                    grid.innerHTML = '<div class="col-span-full text-center text-on-surface-variant">Nenhum membro encontrado ou canal não configurado.</div>';
+                }
+            })
+            .catch(err => {
+                console.error("Erro ao carregar membros:", err);
+                grid.innerHTML = '<div class="col-span-full text-center text-error">Erro ao carregar membros do servidor.</div>';
+            });
+    }
+
+    // Carrega quando a página abrir
+    document.addEventListener("DOMContentLoaded", () => {
+        loadMembers();
+    });
 
     // Killfeed Dinâmico via Discord
     const fallbackMembers = ["Ander", "Tripa Seca", "Alexandre", "Gui", "Nim", "Lucaum", "Diguuh", "Vini", "MTzinn", "Faisca", "Rafael"];
