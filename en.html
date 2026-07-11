@@ -725,7 +725,7 @@ void main() {
     // Carregar Members dinamicamente do Discord
     function loadMembers() {
         const grid = document.getElementById('members-grid');
-        fetch('/.netlify/functions/members')
+        fetch('/api/members')
             .then(res => res.json())
             .then(data => {
                 if (data.members && data.members.length > 0) {
@@ -777,7 +777,7 @@ void main() {
     let discordMessages = [];
 
     // Busca as mensagens no carregamento
-    fetch('/.netlify/functions/killfeed')
+    fetch('/api/killfeed')
         .then(res => res.json())
         .then(data => {
             if (data && data.messages && data.messages.length > 0) {
@@ -894,7 +894,7 @@ void main() {
             }
         }
 
-        fetch('/.netlify/functions/clips')
+        fetch('/api/clips')
             .then(res => res.json())
             .then(data => {
                 if (data && data.clips && data.clips.length > 0) {
