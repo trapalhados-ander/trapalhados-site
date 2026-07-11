@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html class="dark" lang="pt-br"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Trapalhados Squad | Rucha torto, banga errado.</title>
+<!-- Google Fonts & Icons -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&amp;family=Geist:wght@400;700&amp;family=JetBrains+Mono:wght@500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Config -->
+<script id="tailwind-config">
+    tailwind.config = {
+        darkMode: "class",
+        theme: {
+            extend: {
+                "colors": {
+                    "surface-variant": "#353534",
+                    "on-primary-fixed-variant": "#604100",
+                    "surface-container-high": "#2a2a2a",
+                    "inverse-primary": "#7f5700",
+                    "on-secondary": "#5f1500",
+                    "tertiary-fixed-dim": "#00daf3",
+                    "on-tertiary-fixed-variant": "#004f58",
+                    "on-secondary-container": "#fffbff",
+                    "surface-container-low": "#1c1b1b",
+                    "tertiary-container": "#00c9e0",
+                    "error-container": "#93000a",
+                    "outline": "#9e8e79",
+                    "tertiary-fixed": "#9cf0ff",
+                    "secondary-fixed": "#ffdbd1",
+                    "primary": "#ffca74",
+                    "inverse-surface": "#e5e2e1",
+                    "on-error": "#690005",
+                    "on-secondary-fixed": "#3b0900",
+                    "secondary-container": "#d73b00",
+                    "surface-container-highest": "#353534",
+                    "surface-bright": "#3a3939",
+                    "on-tertiary-fixed": "#001f24",
+                    "on-error-container": "#ffdad6",
+                    "surface-tint": "#ffba3b",
+                    "outline-variant": "#514533",
+                    "surface": "#131313",
+                    "background": "#131313",
+                    "primary-fixed-dim": "#ffba3b",
+                    "on-tertiary": "#00363d",
+                    "surface-container-lowest": "#0e0e0e",
+                    "secondary-fixed-dim": "#ffb5a0",
+                    "secondary": "#ffb5a0",
+                    "on-tertiary-container": "#00505a",
+                    "on-secondary-fixed-variant": "#862200",
+                    "on-primary": "#432c00",
+                    "inverse-on-surface": "#313030",
+                    "tertiary": "#33e6ff",
+                    "error": "#ffb4ab",
+                    "on-surface": "#e5e2e1",
+                    "primary-fixed": "#ffdead",
+                    "surface-container": "#201f1f",
+                    "surface-dim": "#131313",
+                    "on-primary-container": "#614200",
+                    "primary-container": "#f2a900",
+                    "on-primary-fixed": "#281900",
+                    "on-background": "#e5e2e1",
+                    "on-surface-variant": "#d6c4ac"
+                },
+                "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+                },
+                "spacing": {
+                    "margin-desktop": "48px",
+                    "unit": "4px",
+                    "gutter": "24px",
+                    "container-max": "1440px",
+                    "margin-mobile": "16px"
+                },
+                "fontFamily": {
+                    "headline-lg-mobile": ["Bebas Neue"],
+                    "body-md": ["Geist"],
+                    "body-lg": ["Geist"],
+                    "headline-lg": ["Bebas Neue"],
+                    "label-sm": ["JetBrains Mono"],
+                    "headline-md": ["Bebas Neue"],
+                    "display-lg": ["Bebas Neue"]
+                }
+            }
+        }
+    }
+</script>
+<style>
+    /* Custom Styles for "Tactical-Grunge" */
+    body {
+        background-color: theme('colors.background');
+        color: theme('colors.on-background');
+        overflow-x: hidden;
+        scroll-behavior: smooth;
+        cursor: crosshair;
+    }
+
+    a, button {
+        cursor: pointer;
+    }
+
+    /* Background Utility Classes */
+    .bg-crate {
+        background-image: linear-gradient(rgba(19, 19, 19, 0.8), rgba(19, 19, 19, 0.85)), url('brand/pubg_airdrop_crate_1783712885178.png');
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+    }
+
+    .bg-containers {
+        background-image: linear-gradient(rgba(19, 19, 19, 0.8), rgba(19, 19, 19, 0.85)), url('brand/pubg_containers_1783712899400.png');
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+    }
+
+    .grunge-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        pointer-events: none;
+        z-index: 10;
+        opacity: 0.15;
+        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+    }
+
+    .glass-card {
+        background: rgba(26, 26, 26, 0.8);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .glass-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: theme('colors.primary-container');
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+    .glass-card:hover::before {
+        opacity: 1;
+    }
+
+    .glow-primary { box-shadow: 0 0 15px rgba(242, 169, 0, 0.4); }
+    .glow-primary-heavy { box-shadow: 0 0 25px rgba(242, 169, 0, 0.7); }
+
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: theme('colors.surface-container-lowest'); }
+    ::-webkit-scrollbar-thumb {
+        background: theme('colors.primary-container');
+        border-radius: theme('borderRadius.full');
+    }
+
+    .reveal {
+        opacity: 0;
+        transform: translateY(30px);
+        transition: all 0.8s cubic-bezier(0.5, 0, 0, 1);
+    }
+    .reveal.active {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    
+    .tilt-wrapper { perspective: 1000px; }
+    .tilt-element {
+        transition: transform 0.1s ease;
+        transform-style: preserve-3d;
+    }
+
+    #killfeed {
+        position: fixed;
+        top: 100px;
+        right: 20px;
+        width: 300px;
+        z-index: 100;
+        pointer-events: none;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        align-items: flex-end;
+    }
+    .killfeed-msg {
+        background: rgba(0, 0, 0, 0.7);
+        border-left: 3px solid theme('colors.error');
+        padding: 6px 12px;
+        color: white;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 12px;
+        animation: slideInRight 0.3s forwards, fadeOut 0.5s 4s forwards;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    @keyframes slideInRight {
+        from { transform: translateX(100%); opacity: 0; }
+        to { transform: translateX(0); opacity: 1; }
+    }
+    @keyframes fadeOut {
+        from { opacity: 1; }
+        to { opacity: 0; }
+    }
+
+</style>
+</head>
+<body class="font-body-md antialiased relative selection:bg-primary-container selection:text-on-primary-container">
+
+<!-- KILLFEED CONTAINER -->
+<div id="killfeed"></div>
+
+<!-- Shader Background -->
+<div class="fixed inset-0 w-full h-full -z-10 opacity-60" style="display:block;">
+<canvas id="shader-canvas-ANIMATION_5" style="display:block;width:100%;height:100%"></canvas>
+<script>
+(function() {
+  const canvas = document.getElementById('shader-canvas-ANIMATION_5');
+  function syncSize() {
+    const w = canvas.clientWidth  || 1280;
+    const h = canvas.clientHeight || 720;
+    if (canvas.width !== w || canvas.height !== h) {
+      canvas.width  = w;
+      canvas.height = h;
+    }
+  }
+  if (typeof ResizeObserver !== 'undefined') {
+    new ResizeObserver(syncSize).observe(canvas);
+  }
+  syncSize();
+  const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+  if (!gl) return;
+  const vs = `attribute vec2 a_position; varying vec2 v_texCoord; void main() { v_texCoord = a_position * 0.5 + 0.5; gl_Position = vec4(a_position, 0.0, 1.0); }`;
+  const fs = `precision highp float;
+uniform float u_time;
+uniform vec2 u_resolution;
+varying vec2 v_texCoord;
+float hash(vec2 p) { return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453123); }
+float noise(vec2 p) {
+    vec2 i = floor(p);
+    vec2 f = fract(p);
+    vec2 u = f * f * (3.0 - 2.0 * f);
+    return mix(mix(hash(i + vec2(0.0, 0.0)), hash(i + vec2(1.0, 0.0)), u.x),
+               mix(hash(i + vec2(0.0, 1.0)), hash(i + vec2(1.0, 1.0)), u.x), u.y);
+}
+void main() {
+    vec2 uv = v_texCoord;
+    vec2 p = uv * 2.0 - 1.0;
+    p.x *= u_resolution.x / u_resolution.y;
+    float n = noise(uv * 3.0 + u_time * 0.1);
+    n += 0.5 * noise(uv * 6.0 - u_time * 0.15);
+    n += 0.25 * noise(uv * 12.0 + u_time * 0.2);
+    vec3 smokeColor = vec3(0.05, 0.05, 0.06); 
+    vec3 baseColor = vec3(0.02, 0.02, 0.03); 
+    vec3 finalColor = mix(baseColor, smokeColor, n * 0.4);
+    float particles = 0.0;
+    for(float i = 0.0; i < 20.0; i++) {
+        vec2 pos = vec2(hash(vec2(i, 1.0)), hash(vec2(i, 2.0)));
+        pos.y = fract(pos.y + u_time * (0.05 + hash(vec2(i, 3.0)) * 0.05));
+        pos.x += sin(u_time * 0.5 + i) * 0.02;
+        float dist = length(uv - pos);
+        float size = 0.001 + hash(vec2(i, 4.0)) * 0.002;
+        particles += smoothstep(size, 0.0, dist) * (0.5 + 0.5 * sin(u_time * 2.0 + i));
+    }
+    vec3 accentColor = vec3(0.95, 0.66, 0.0); 
+    finalColor += particles * accentColor * 0.8;
+    float vignette = 1.0 - smoothstep(0.5, 1.5, length(p));
+    finalColor *= vignette;
+    gl_FragColor = vec4(finalColor, 1.0);
+}`;
+  function cs(type, src) {
+    const s = gl.createShader(type); gl.shaderSource(s, src); gl.compileShader(s); return s;
+  }
+  const prog = gl.createProgram();
+  gl.attachShader(prog, cs(gl.VERTEX_SHADER, vs)); gl.attachShader(prog, cs(gl.FRAGMENT_SHADER, fs)); gl.linkProgram(prog); gl.useProgram(prog);
+  const buf = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, buf); gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1, 1,-1, -1,1, 1,1]), gl.STATIC_DRAW);
+  const pos = gl.getAttribLocation(prog, 'a_position'); gl.enableVertexAttribArray(pos); gl.vertexAttribPointer(pos, 2, gl.FLOAT, false, 0, 0);
+  const uTime = gl.getUniformLocation(prog, 'u_time'); const uRes = gl.getUniformLocation(prog, 'u_resolution');
+  function render(t) {
+    if (typeof ResizeObserver === 'undefined') syncSize();
+    gl.viewport(0, 0, canvas.width, canvas.height);
+    if (uTime) gl.uniform1f(uTime, t * 0.001); if (uRes) gl.uniform2f(uRes, canvas.width, canvas.height);
+    gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4); requestAnimationFrame(render);
+  }
+  render(0);
+})();
+</script>
+</div>
+<!-- Grunge Overlay -->
+<div class="grunge-overlay"></div>
+
+<!-- === TopNavBar === -->
+<nav class="fixed top-0 w-full z-50 flex justify-between items-center px-margin-mobile md:px-margin-desktop h-20 border-b border-primary/20 bg-surface/80 backdrop-blur-xl shadow-[0_0_15px_rgba(242,169,0,0.2)]">
+    <div class="flex items-center gap-4">
+        <!-- REDUNDANT TEXT REMOVED -->
+        <img src="brand/1.png" alt="Trapalhados Logo" class="w-16 h-16 object-contain hidden md:block">
+    </div>
+    
+    <div class="hidden md:flex gap-6 items-center">
+        <a class="font-label-sm text-on-surface-variant hover:text-primary transition-colors hover:bg-primary/10 px-3 py-2 uppercase" href="#squad">Membros</a>
+        <a class="font-label-sm text-on-surface-variant hover:text-primary transition-colors hover:bg-primary/10 px-3 py-2 uppercase" href="#maps">Mapas</a>
+        <a class="font-label-sm text-on-surface-variant hover:text-primary transition-colors hover:bg-primary/10 px-3 py-2 uppercase" href="#rules">Regras</a>
+        <a class="font-label-sm text-on-surface-variant hover:text-primary transition-colors hover:bg-primary/10 px-3 py-2 uppercase" href="#clips">Clipes</a>
+        <a class="font-label-sm text-primary border-b-2 border-primary font-bold hover:bg-primary/10 px-3 py-2 uppercase transition-all duration-150" href="#social">QG</a>
+    </div>
+
+    <div class="flex items-center gap-4">
+        <!-- Bandeirinha -->
+        <button class="flex items-center gap-2 hover:bg-surface-variant px-2 py-1 rounded transition-colors" title="PT-BR">
+            <span class="text-xl">🇧🇷</span>
+        </button>
+
+        <a href="https://discord.gg/SfWJPGzV93" target="_blank" rel="noopener noreferrer" class="bg-primary-container text-on-primary-container font-headline-md text-[18px] md:text-[20px] uppercase px-4 py-2 md:px-6 md:py-2 rounded-sm transform skew-x-[-10deg] hover:scale-105 hover:glow-primary-heavy transition-all duration-200">
+            <span class="inline-block skew-x-[10deg]">Alistar-se</span>
+        </a>
+    </div>
+</nav>
+
+<!-- Main Content Canvas -->
+<main class="relative z-10 pt-20">
+
+    <!-- === Hero Section === -->
+    <section class="min-h-[90vh] flex flex-col items-center justify-center text-center px-margin-mobile md:px-margin-desktop relative pt-8 md:pt-16">
+        <div class="w-full max-w-container-max mx-auto flex flex-col items-center gap-8 md:gap-12 reveal">
+            
+            <!-- Squad Banner (Substituindo o Logo) -->
+            <div class="w-full rounded-2xl tilt-wrapper relative z-10">
+                <div class="tilt-element rounded-2xl overflow-hidden glass-card border-2 border-primary/40 drop-shadow-[0_0_50px_rgba(242,169,0,0.4)]">
+                    <img src="brand/banner.png" alt="Banner do Esquadrão Trapalhados" class="w-full h-auto max-h-[70vh] object-cover md:object-contain bg-black/50">
+                </div>
+            </div>
+            
+            <div class="flex flex-col gap-4">
+                <p class="font-headline-md text-[24px] md:text-[36px] text-primary-fixed-dim uppercase italic drop-shadow-xl bg-background/60 px-6 py-2 rounded-lg backdrop-blur-md inline-block">
+                    Rucha torto. Banga errado. Resenha garantida.
+                </p>
+            </div>
+
+            <a href="https://discord.gg/SfWJPGzV93" target="_blank" rel="noopener noreferrer" class="mt-4 md:mt-8 inline-block bg-primary-container text-on-primary-container font-headline-lg text-[32px] md:text-[40px] uppercase px-12 md:px-16 py-4 md:py-6 rounded-sm transform skew-x-[-15deg] hover:scale-110 glow-primary hover:glow-primary-heavy transition-all duration-300 relative group overflow-hidden shadow-2xl">
+                <div class="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out"></div>
+                <span class="inline-block skew-x-[15deg] relative z-10">Entrar no Esquadrão</span>
+            </a>
+
+        </div>
+    </section>
+
+    <!-- === STATS COUNTER SECTION === -->
+    <section class="py-16 bg-surface-container-lowest/80 border-y border-primary/20" id="stats">
+        <div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop grid grid-cols-2 md:grid-cols-4 gap-8 text-center reveal">
+            <div class="flex flex-col items-center gap-2">
+                <span class="material-symbols-outlined text-[40px] text-primary">directions_car</span>
+                <h3 class="font-display-lg text-[48px] text-primary stat-counter" data-target="1250">0</h3>
+                <p class="font-label-sm text-on-surface-variant uppercase">Veículos Capotados</p>
+            </div>
+            <div class="flex flex-col items-center gap-2">
+                <span class="material-symbols-outlined text-[40px] text-error">skull</span>
+                <h3 class="font-display-lg text-[48px] text-error stat-counter" data-target="999">0</h3>
+                <p class="font-label-sm text-on-surface-variant uppercase">Mortes pra Zona</p>
+            </div>
+            <div class="flex flex-col items-center gap-2">
+                <span class="material-symbols-outlined text-[40px] text-tertiary">pan_tool</span>
+                <h3 class="font-display-lg text-[48px] text-tertiary stat-counter" data-target="42">0</h3>
+                <p class="font-label-sm text-on-surface-variant uppercase">Kills de Panela</p>
+            </div>
+            <div class="flex flex-col items-center gap-2">
+                <span class="material-symbols-outlined text-[40px] text-on-surface">emoji_events</span>
+                <h3 class="font-display-lg text-[48px] text-on-surface stat-counter" data-target="1">0</h3>
+                <p class="font-label-sm text-on-surface-variant uppercase">Vitória (Na Cagada)</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- === ROSTER / MEMBERS SECTION (With background image) === -->
+    <section class="py-32 px-margin-mobile md:px-margin-desktop bg-containers relative border-b border-surface-variant/30" id="squad">
+        <div class="max-w-container-max mx-auto relative z-10">
+            <h2 class="font-headline-lg text-headline-lg text-primary uppercase mb-12 flex items-center gap-4 justify-center reveal drop-shadow-lg">
+                <span class="material-symbols-outlined text-[40px]" style="font-variation-settings: 'FILL' 1;">groups</span>
+                O Esquadrão
+            </h2>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+                <!-- 1. Ander -->
+                <div class="glass-card rounded-lg p-6 flex flex-col items-center gap-4 text-center reveal border-t-4 border-t-primary tilt-wrapper">
+                    <div class="tilt-element">
+                        <div class="w-32 h-32 rounded-full bg-surface-variant mb-4 flex items-center justify-center shadow-lg border-2 border-primary/50 overflow-hidden mx-auto"><span class="material-symbols-outlined text-[64px] text-on-surface-variant">person</span></div>
+                        <h3 class="font-headline-md text-[24px] text-on-surface uppercase drop-shadow-md">Ander</h3>
+                        <div class="bg-surface-variant text-primary font-label-sm px-2 py-1 rounded uppercase inline-block mb-4">Capitão do Caos</div>
+                        <ul class="text-left font-body-md text-sm text-on-surface-variant space-y-2 w-full border-t border-surface-variant pt-4">
+                            <li><strong class="text-on-surface">KD:</strong> 0.2</li>
+                            <li><strong class="text-on-surface">Arma:</strong> Panela / UZI</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- 2. Tripa Seca -->
+                <div class="glass-card rounded-lg p-6 flex flex-col items-center gap-4 text-center reveal border-t-4 border-t-error tilt-wrapper">
+                    <div class="tilt-element">
+                        <div class="w-32 h-32 rounded-full bg-surface-variant mb-4 flex items-center justify-center shadow-lg border-2 border-error/50 overflow-hidden mx-auto"><span class="material-symbols-outlined text-[64px] text-on-surface-variant">person</span></div>
+                        <h3 class="font-headline-md text-[24px] text-on-surface uppercase drop-shadow-md">Tripa Seca</h3>
+                        <div class="bg-surface-variant text-error font-label-sm px-2 py-1 rounded uppercase inline-block mb-4">Mestre do Capote</div>
+                        <ul class="text-left font-body-md text-sm text-on-surface-variant space-y-2 w-full border-t border-surface-variant pt-4">
+                            <li><strong class="text-on-surface">KD:</strong> -1 (Se mata)</li>
+                            <li><strong class="text-on-surface">Arma:</strong> Dacia Voador</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- 3. Alexandre -->
+                <div class="glass-card rounded-lg p-6 flex flex-col items-center gap-4 text-center reveal border-t-4 border-t-tertiary tilt-wrapper">
+                    <div class="tilt-element">
+                        <div class="w-32 h-32 rounded-full bg-surface-variant mb-4 flex items-center justify-center shadow-lg border-2 border-tertiary/50 overflow-hidden mx-auto"><span class="material-symbols-outlined text-[64px] text-on-surface-variant">person</span></div>
+                        <h3 class="font-headline-md text-[24px] text-on-surface uppercase drop-shadow-md">Alexandre</h3>
+                        <div class="bg-surface-variant text-tertiary font-label-sm px-2 py-1 rounded uppercase inline-block mb-4">Looter Profissional</div>
+                        <ul class="text-left font-body-md text-sm text-on-surface-variant space-y-2 w-full border-t border-surface-variant pt-4">
+                            <li><strong class="text-on-surface">KD:</strong> 0.4</li>
+                            <li><strong class="text-on-surface">Arma:</strong> Mochila Nível 3</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- 4. Gui -->
+                <div class="glass-card rounded-lg p-6 flex flex-col items-center gap-4 text-center reveal border-t-4 border-t-primary tilt-wrapper">
+                    <div class="tilt-element">
+                        <div class="w-32 h-32 rounded-full bg-surface-variant mb-4 flex items-center justify-center shadow-lg border-2 border-primary/50 overflow-hidden mx-auto"><span class="material-symbols-outlined text-[64px] text-on-surface-variant">person</span></div>
+                        <h3 class="font-headline-md text-[24px] text-on-surface uppercase drop-shadow-md">Gui</h3>
+                        <div class="bg-surface-variant text-primary font-label-sm px-2 py-1 rounded uppercase inline-block mb-4">O Sumido</div>
+                        <ul class="text-left font-body-md text-sm text-on-surface-variant space-y-2 w-full border-t border-surface-variant pt-4">
+                            <li><strong class="text-on-surface">KD:</strong> 0.1</li>
+                            <li><strong class="text-on-surface">Arma:</strong> VSS (Erra tudo)</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- 5. Nim -->
+                <div class="glass-card rounded-lg p-6 flex flex-col items-center gap-4 text-center reveal border-t-4 border-t-error tilt-wrapper">
+                    <div class="tilt-element">
+                        <div class="w-32 h-32 rounded-full bg-surface-variant mb-4 flex items-center justify-center shadow-lg border-2 border-error/50 overflow-hidden mx-auto"><span class="material-symbols-outlined text-[64px] text-on-surface-variant">person</span></div>
+                        <h3 class="font-headline-md text-[24px] text-on-surface uppercase drop-shadow-md">Nim</h3>
+                        <div class="bg-surface-variant text-error font-label-sm px-2 py-1 rounded uppercase inline-block mb-4">Kamikaze</div>
+                        <ul class="text-left font-body-md text-sm text-on-surface-variant space-y-2 w-full border-t border-surface-variant pt-4">
+                            <li><strong class="text-on-surface">KD:</strong> 0.8 (Bom até)</li>
+                            <li><strong class="text-on-surface">Arma:</strong> C4 + Moto</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- 6. Lucaum -->
+                <div class="glass-card rounded-lg p-6 flex flex-col items-center gap-4 text-center reveal border-t-4 border-t-tertiary tilt-wrapper">
+                    <div class="tilt-element">
+                        <div class="w-32 h-32 rounded-full bg-surface-variant mb-4 flex items-center justify-center shadow-lg border-2 border-tertiary/50 overflow-hidden mx-auto"><span class="material-symbols-outlined text-[64px] text-on-surface-variant">person</span></div>
+                        <h3 class="font-headline-md text-[24px] text-on-surface uppercase drop-shadow-md">Lucaum</h3>
+                        <div class="bg-surface-variant text-tertiary font-label-sm px-2 py-1 rounded uppercase inline-block mb-4">Isca Oficial</div>
+                        <ul class="text-left font-body-md text-sm text-on-surface-variant space-y-2 w-full border-t border-surface-variant pt-4">
+                            <li><strong class="text-on-surface">KD:</strong> 0.05</li>
+                            <li><strong class="text-on-surface">Arma:</strong> Grito no Discord</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- 7. Diguuh -->
+                <div class="glass-card rounded-lg p-6 flex flex-col items-center gap-4 text-center reveal border-t-4 border-t-primary tilt-wrapper">
+                    <div class="tilt-element">
+                        <div class="w-32 h-32 rounded-full bg-surface-variant mb-4 flex items-center justify-center shadow-lg border-2 border-primary/50 overflow-hidden mx-auto"><span class="material-symbols-outlined text-[64px] text-on-surface-variant">person</span></div>
+                        <h3 class="font-headline-md text-[24px] text-on-surface uppercase drop-shadow-md">Diguuh</h3>
+                        <div class="bg-surface-variant text-primary font-label-sm px-2 py-1 rounded uppercase inline-block mb-4">Sniper Cego</div>
+                        <ul class="text-left font-body-md text-sm text-on-surface-variant space-y-2 w-full border-t border-surface-variant pt-4">
+                            <li><strong class="text-on-surface">KD:</strong> 0.3</li>
+                            <li><strong class="text-on-surface">Arma:</strong> Kar98 (Atira no vento)</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- 8. Vini -->
+                <div class="glass-card rounded-lg p-6 flex flex-col items-center gap-4 text-center reveal border-t-4 border-t-error tilt-wrapper">
+                    <div class="tilt-element">
+                        <div class="w-32 h-32 rounded-full bg-surface-variant mb-4 flex items-center justify-center shadow-lg border-2 border-error/50 overflow-hidden mx-auto"><span class="material-symbols-outlined text-[64px] text-on-surface-variant">person</span></div>
+                        <h3 class="font-headline-md text-[24px] text-on-surface uppercase drop-shadow-md">Vini</h3>
+                        <div class="bg-surface-variant text-error font-label-sm px-2 py-1 rounded uppercase inline-block mb-4">Colecionador de Redzone</div>
+                        <ul class="text-left font-body-md text-sm text-on-surface-variant space-y-2 w-full border-t border-surface-variant pt-4">
+                            <li><strong class="text-on-surface">KD:</strong> 0.2</li>
+                            <li><strong class="text-on-surface">Arma:</strong> Imã de Bomba</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- 9. MTzinn -->
+                <div class="glass-card rounded-lg p-6 flex flex-col items-center gap-4 text-center reveal border-t-4 border-t-tertiary tilt-wrapper">
+                    <div class="tilt-element">
+                        <div class="w-32 h-32 rounded-full bg-surface-variant mb-4 flex items-center justify-center shadow-lg border-2 border-tertiary/50 overflow-hidden mx-auto"><span class="material-symbols-outlined text-[64px] text-on-surface-variant">person</span></div>
+                        <h3 class="font-headline-md text-[24px] text-on-surface uppercase drop-shadow-md">MTzinn</h3>
+                        <div class="bg-surface-variant text-tertiary font-label-sm px-2 py-1 rounded uppercase inline-block mb-4">O Atrasado</div>
+                        <ul class="text-left font-body-md text-sm text-on-surface-variant space-y-2 w-full border-t border-surface-variant pt-4">
+                            <li><strong class="text-on-surface">KD:</strong> 0.6</li>
+                            <li><strong class="text-on-surface">Arma:</strong> Lootear morto</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- 10. Faisca -->
+                <div class="glass-card rounded-lg p-6 flex flex-col items-center gap-4 text-center reveal border-t-4 border-t-primary tilt-wrapper">
+                    <div class="tilt-element">
+                        <div class="w-32 h-32 rounded-full bg-surface-variant mb-4 flex items-center justify-center shadow-lg border-2 border-primary/50 overflow-hidden mx-auto"><span class="material-symbols-outlined text-[64px] text-on-surface-variant">person</span></div>
+                        <h3 class="font-headline-md text-[24px] text-on-surface uppercase drop-shadow-md">Faisca</h3>
+                        <div class="bg-surface-variant text-primary font-label-sm px-2 py-1 rounded uppercase inline-block mb-4">Rei do Fogo Amigo</div>
+                        <ul class="text-left font-body-md text-sm text-on-surface-variant space-y-2 w-full border-t border-surface-variant pt-4">
+                            <li><strong class="text-on-surface">KD:</strong> 1.0 (Só em aliados)</li>
+                            <li><strong class="text-on-surface">Arma:</strong> Molotov</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- 11. Rafael -->
+                <div class="glass-card rounded-lg p-6 flex flex-col items-center gap-4 text-center reveal border-t-4 border-t-error tilt-wrapper">
+                    <div class="tilt-element">
+                        <div class="w-32 h-32 rounded-full bg-surface-variant mb-4 flex items-center justify-center shadow-lg border-2 border-error/50 overflow-hidden mx-auto"><span class="material-symbols-outlined text-[64px] text-on-surface-variant">person</span></div>
+                        <h3 class="font-headline-md text-[24px] text-on-surface uppercase drop-shadow-md">Rafael</h3>
+                        <div class="bg-surface-variant text-error font-label-sm px-2 py-1 rounded uppercase inline-block mb-4">Motorista Uber</div>
+                        <ul class="text-left font-body-md text-sm text-on-surface-variant space-y-2 w-full border-t border-surface-variant pt-4">
+                            <li><strong class="text-on-surface">KD:</strong> 0.1</li>
+                            <li><strong class="text-on-surface">Arma:</strong> Buzina da UAZ</li>
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- === INTERACTIVE MAPS SECTION === -->
+    <section class="py-32 px-margin-mobile md:px-margin-desktop border-y border-surface-variant/30" id="maps">
+        <div class="max-w-4xl mx-auto reveal">
+            <h2 class="font-headline-lg text-headline-lg text-primary uppercase mb-4 flex items-center gap-4 justify-center">
+                <span class="material-symbols-outlined text-[40px]">map</span>
+                Nossos Drops Oficiais
+            </h2>
+            <p class="text-center font-body-md text-on-surface-variant mb-12">Clique no mapa para ver onde nosso esquadrão garante a derrota.</p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="glass-card p-4 rounded text-center cursor-pointer group map-btn hover:bg-primary/20 transition-all border-b-2 border-b-primary" onclick="showMapTip('erangel')">
+                    <span class="font-headline-md text-[24px] text-on-surface uppercase group-hover:text-primary transition-colors">Erangel</span>
+                </div>
+                <div class="glass-card p-4 rounded text-center cursor-pointer group map-btn hover:bg-primary/20 transition-all border-b-2 border-b-error" onclick="showMapTip('miramar')">
+                    <span class="font-headline-md text-[24px] text-on-surface uppercase group-hover:text-error transition-colors">Miramar</span>
+                </div>
+                <div class="glass-card p-4 rounded text-center cursor-pointer group map-btn hover:bg-primary/20 transition-all border-b-2 border-b-tertiary" onclick="showMapTip('sanhok')">
+                    <span class="font-headline-md text-[24px] text-on-surface uppercase group-hover:text-tertiary transition-colors">Sanhok</span>
+                </div>
+            </div>
+
+            <!-- Map Result Display -->
+            <div id="map-result" class="mt-8 glass-card p-8 rounded border border-surface-variant text-center opacity-0 transition-opacity duration-500 hidden">
+                <h3 id="map-result-title" class="font-headline-md text-[28px] text-primary uppercase mb-2">Selecione um mapa</h3>
+                <p id="map-result-desc" class="font-body-md text-on-surface-variant">Para descobrir o nosso segredo do fracasso.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- === Rules Section (With Airdrop Background) === -->
+    <section class="py-32 px-margin-mobile md:px-margin-desktop bg-crate relative border-y border-primary/30" id="rules">
+        <div class="max-w-4xl mx-auto glass-card p-8 md:p-16 border-t-4 border-t-primary rounded-lg reveal relative z-10 shadow-2xl">
+            <h2 class="font-headline-lg text-headline-lg text-primary uppercase mb-8 flex items-center gap-4 justify-center drop-shadow-md">
+                <span class="material-symbols-outlined text-[40px] text-error" style="font-variation-settings: 'FILL' 1;">gavel</span>
+                Código de Conduta
+            </h2>
+            <div class="space-y-6 text-on-surface">
+                <div class="flex gap-4 items-start bg-error-container/40 p-4 border-l-4 border-error rounded backdrop-blur-md">
+                    <span class="material-symbols-outlined text-error mt-1">block</span>
+                    <div>
+                        <h3 class="font-headline-md text-xl uppercase text-error">Pro Players Não São Bem-Vindos</h3>
+                        <p class="font-body-md text-on-surface-variant font-bold">Se o seu KD for maior que 2.0 ou se você sabe controlar o recuo da Beryl, este não é o seu lugar. Nós jogamos pra dar risada (e morrer caindo da moto).</p>
+                    </div>
+                </div>
+                <div class="flex gap-4 items-start bg-primary-container/20 p-4 border-l-4 border-primary rounded backdrop-blur-md">
+                    <span class="material-symbols-outlined text-primary mt-1">directions_run</span>
+                    <div>
+                        <h3 class="font-headline-md text-xl uppercase text-primary">Regra do Rush Torto</h3>
+                        <p class="font-body-md text-on-surface-variant font-bold">Alguém gritou "Bora rushar"? Todo mundo vai. Não importa se você tá de UZI sem colete no meio do aberto. Lealdade ao erro é fundamental.</p>
+                    </div>
+                </div>
+                <div class="flex gap-4 items-start bg-tertiary-container/20 p-4 border-l-4 border-tertiary rounded backdrop-blur-md">
+                    <span class="material-symbols-outlined text-tertiary mt-1">front_hand</span>
+                    <div>
+                        <h3 class="font-headline-md text-xl uppercase text-tertiary">Fogo Amigo (Sem Querer)</h3>
+                        <p class="font-body-md text-on-surface-variant font-bold">Bangou o time inteiro tentando jogar a granada pela janela? Relaxe. O importante é a resenha que vem depois (e o clipe que vai pro TikTok).</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- === Social Hub Section === -->
+    <section class="py-32 px-margin-mobile md:px-margin-desktop bg-surface-container-low/50 relative border-b border-surface-variant/50" id="social">
+        <div class="max-w-container-max mx-auto">
+            <h2 class="font-headline-lg text-headline-lg text-primary uppercase mb-12 flex items-center gap-4 reveal">
+                <span class="material-symbols-outlined text-[40px]" style="font-variation-settings: 'FILL' 1;">hub</span>
+                Quartel General
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-gutter">
+                <div class="tilt-wrapper reveal">
+                    <a href="https://discord.gg/SfWJPGzV93" target="_blank" rel="noopener noreferrer" class="tilt-element glass-card p-8 flex flex-col items-center justify-center gap-6 h-64 group border-b-4 border-b-[#5865F2] hover:bg-[#5865F2]/10 transition-colors">
+                        <div class="w-20 h-20 rounded-full bg-[#5865F2]/20 flex items-center justify-center group-hover:scale-110 group-hover:shadow-[0_0_20px_rgba(88,101,242,0.6)] transition-all duration-300">
+                            <span class="material-symbols-outlined text-[48px] text-[#5865F2]" style="font-variation-settings: 'FILL' 1;">forum</span>
+                        </div>
+                        <span class="font-headline-md text-[24px] text-on-surface uppercase">Discord</span>
+                    </a>
+                </div>
+                <div class="tilt-wrapper reveal" style="transition-delay: 100ms;">
+                    <a href="https://www.youtube.com/@PUBG_BRASIL" target="_blank" rel="noopener noreferrer" class="tilt-element glass-card p-8 flex flex-col items-center justify-center gap-6 h-64 group border-b-4 border-b-[#FF0000] hover:bg-[#FF0000]/10 transition-colors">
+                        <div class="w-20 h-20 rounded-full bg-[#FF0000]/20 flex items-center justify-center group-hover:scale-110 group-hover:shadow-[0_0_20px_rgba(255,0,0,0.6)] transition-all duration-300">
+                            <span class="material-symbols-outlined text-[48px] text-[#FF0000]" style="font-variation-settings: 'FILL' 1;">play_circle</span>
+                        </div>
+                        <span class="font-headline-md text-[24px] text-on-surface uppercase">YouTube</span>
+                    </a>
+                </div>
+                <div class="tilt-wrapper reveal" style="transition-delay: 200ms;">
+                    <a href="https://www.tiktok.com/@trapalhados.cla" target="_blank" rel="noopener noreferrer" class="tilt-element glass-card p-8 flex flex-col items-center justify-center gap-6 h-64 group border-b-4 border-b-[#00f2fe] hover:bg-[#00f2fe]/10 transition-colors">
+                        <div class="w-20 h-20 rounded-full bg-[#00f2fe]/20 flex items-center justify-center group-hover:scale-110 group-hover:shadow-[0_0_20px_rgba(0,242,254,0.6)] transition-all duration-300">
+                            <span class="material-symbols-outlined text-[48px] text-[#00f2fe]" style="font-variation-settings: 'FILL' 1;">music_video</span>
+                        </div>
+                        <span class="font-headline-md text-[24px] text-on-surface uppercase">TikTok</span>
+                    </a>
+                </div>
+                <div class="tilt-wrapper reveal" style="transition-delay: 300ms;">
+                    <a href="https://www.instagram.com/pubg_br/" target="_blank" rel="noopener noreferrer" class="tilt-element glass-card p-8 flex flex-col items-center justify-center gap-6 h-64 group border-b-4 border-b-[#E1306C] hover:bg-[#E1306C]/10 transition-colors">
+                        <div class="w-20 h-20 rounded-full bg-[#E1306C]/20 flex items-center justify-center group-hover:scale-110 group-hover:shadow-[0_0_20px_rgba(225,48,108,0.6)] transition-all duration-300">
+                            <span class="material-symbols-outlined text-[48px] text-[#E1306C]" style="font-variation-settings: 'FILL' 1;">photo_camera</span>
+                        </div>
+                        <span class="font-headline-md text-[24px] text-on-surface uppercase">Instagram</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- === Clips Wall Section === -->
+    <section class="py-24 px-margin-mobile md:px-margin-desktop bg-surface-container-highest/30 border-y border-surface-variant/30" id="clips">
+        <div class="max-w-container-max mx-auto">
+            <div class="flex justify-between items-end mb-12 reveal">
+                <h2 class="font-headline-lg text-[32px] md:text-headline-lg text-primary uppercase flex items-center gap-4">
+                    <span class="material-symbols-outlined text-[40px]" style="font-variation-settings: 'FILL' 1;">movie</span>
+                    Mural das Vergonhas
+                </h2>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="glass-card rounded-lg overflow-hidden group cursor-pointer reveal">
+                    <div class="relative aspect-video overflow-hidden">
+                        <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDO7cnOD7QcsbnxnUerehlfdjwzB0iGJsabtwX9d4G04vK_SqUrxsCHzUNLFL9k3h5X78ChTImEb9RDjxKqY5dcP_vp7rbfmicfjc6HF96PgPnpFbD0norDZAGBXQZpwOO-bPLb3C7kcmXHEW9RLXc36aUi3MkC-ah0I8a30VAMFJnag55c5CpWnNfFLcc1A5GhIso03qv4gAk2v-nMSQW7db9OZbQ8iU79c-tvPzv3aBaxMl440NKi1Srk5NGEdcq7F_pOrWw5EhI"/>
+                        <div class="absolute inset-0 bg-black/40 flex items-center justify-center"><div class="w-16 h-16 rounded-full bg-primary-container/80 flex items-center justify-center backdrop-blur-sm"><span class="material-symbols-outlined text-[32px] text-on-primary-container" style="font-variation-settings: 'FILL' 1;">play_arrow</span></div></div>
+                        <div class="absolute top-4 left-4 bg-surface-variant text-primary font-label-sm px-3 py-1 rounded-sm border-l-2 border-primary uppercase shadow-md flex items-center gap-2"> PANELAÇO </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="font-headline-md text-[20px] text-on-surface uppercase mb-2">Pânico de Panela em Pochinki</h3>
+                        <p class="font-body-md text-on-surface-variant text-sm">Quando o esquadrão inteiro cai no mesmo teto e só acha panela.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+</main>
+
+<!-- === Footer === -->
+<footer class="w-full py-12 px-margin-desktop flex flex-col md:flex-row justify-between items-center gap-gutter bg-surface-container-lowest dark:bg-surface-container-lowest border-t border-primary/30 mt-16 relative z-10">
+    <div class="flex flex-col items-center md:items-start gap-2">
+        <span class="font-headline-lg text-headline-lg text-primary uppercase italic">Trapalhados</span>
+        <span class="font-body-md text-sm text-on-surface-variant text-center md:text-left">© 2025 Trapalhados Squad. Rucha torto, banga errado. Feito para resenha.</span>
+    </div>
+</footer>
+
+<!-- Interactive Scripts -->
+<script>
+    // Scroll Reveal Logic
+    function reveal() {
+        var reveals = document.querySelectorAll(".reveal");
+        for (var i = 0; i < reveals.length; i++) {
+            var windowHeight = window.innerHeight;
+            var elementTop = reveals[i].getBoundingClientRect().top;
+            var elementVisible = 100;
+            if (elementTop < windowHeight - elementVisible) {
+                reveals[i].classList.add("active");
+            }
+        }
+    }
+    window.addEventListener("scroll", reveal);
+    reveal();
+
+    // 3D Tilt Effect for Cards
+    const tiltWrappers = document.querySelectorAll('.tilt-wrapper');
+    tiltWrappers.forEach(wrapper => {
+        const element = wrapper.querySelector('.tilt-element');
+        wrapper.addEventListener('mousemove', (e) => {
+            const rect = wrapper.getBoundingClientRect();
+            const x = e.clientX - rect.left; 
+            const y = e.clientY - rect.top;  
+            const centerX = rect.width / 2;
+            const centerY = rect.height / 2;
+            const rotateX = ((y - centerY) / centerY) * -10; 
+            const rotateY = ((x - centerX) / centerX) * 10;
+            element.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
+        });
+        wrapper.addEventListener('mouseleave', () => {
+            element.style.transform = `rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`;
+            element.style.transition = 'transform 0.5s ease';
+            setTimeout(() => { element.style.transition = 'transform 0.1s ease'; }, 500);
+        });
+    });
+
+    // Stats Counter Animation
+    const counters = document.querySelectorAll('.stat-counter');
+    const speed = 200; 
+    const animateCounters = () => {
+        counters.forEach(counter => {
+            const updateCount = () => {
+                const target = +counter.getAttribute('data-target');
+                const count = +counter.innerText;
+                const inc = target / speed;
+                if (count < target) {
+                    counter.innerText = Math.ceil(count + inc);
+                    setTimeout(updateCount, 1);
+                } else {
+                    counter.innerText = target + (target > 500 ? '+' : '');
+                }
+            };
+            
+            const rect = counter.getBoundingClientRect();
+            if(rect.top < window.innerHeight && counter.innerText == "0") {
+                updateCount();
+            }
+        });
+    }
+    window.addEventListener('scroll', animateCounters);
+
+    // Interactive Map Script
+    function showMapTip(mapName) {
+        const resultBox = document.getElementById('map-result');
+        const title = document.getElementById('map-result-title');
+        const desc = document.getElementById('map-result-desc');
+        
+        resultBox.classList.remove('hidden');
+        resultBox.classList.add('opacity-0');
+        
+        setTimeout(() => {
+            if(mapName === 'erangel') {
+                title.innerText = "Pochinki (Erangel)";
+                title.className = "font-headline-md text-[28px] uppercase mb-2 text-primary";
+                desc.innerText = "A gente cai no celeiro, todo mundo pega uma pistola, e 30 segundos depois voltamos pro lobby. Clássico.";
+            } else if(mapName === 'miramar') {
+                title.innerText = "Pecado (Miramar)";
+                title.className = "font-headline-md text-[28px] uppercase mb-2 text-error";
+                desc.innerText = "A promessa é dominar o cassino ou o ginásio. A realidade é morrer pro primeiro cara com uma Win94.";
+            } else if(mapName === 'sanhok') {
+                title.innerText = "Bootcamp (Sanhok)";
+                title.className = "font-headline-md text-[28px] uppercase mb-2 text-tertiary";
+                desc.innerText = "Não sei porque a gente clica nesse mapa. É pular, ouvir passos em cima, embaixo, do lado, e chorar.";
+            }
+            resultBox.classList.remove('opacity-0');
+            resultBox.classList.add('opacity-100');
+        }, 100);
+    }
+
+    // Expanded Killfeed Simulation for 11 Members
+    const members = ["Ander", "Tripa Seca", "Alexandre", "Gui", "Nim", "Lucaum", "Diguuh", "Vini", "MTzinn", "Faisca", "Rafael"];
+    const actions = [
+        "morreu por queda (veículo).",
+        "abateu si mesmo com granada.",
+        "foi engolido pela Zona Azul.",
+        "bateu o Dacia na árvore.",
+        "fritou o time com Molotov.",
+        "atirou na própria panela e morreu.",
+        "esquivou da bala com a cabeça.",
+        "deixou o companheiro sangrando até a morte."
+    ];
+    const quotes = [
+        ": 'Tem um aqui, deitei! Pera, é nosso.'",
+        ": 'Alguém tem bala verde?'",
+        ": 'Deixa que eu dirijo!' (Boom)",
+        ": 'Nossa, lagou aqui no meio da trocação...'",
+        ": 'Cadê vocês? Caí no prédio errado!'"
+    ];
+    
+    function spawnKillfeed() {
+        const container = document.getElementById('killfeed');
+        const msg = document.createElement('div');
+        msg.className = 'killfeed-msg';
+        
+        const icon = document.createElement('span');
+        icon.className = 'material-symbols-outlined text-[16px]';
+        icon.innerText = 'skull';
+        
+        const text = document.createElement('span');
+        
+        // Randomly pick to show an action or a funny quote
+        const player1 = members[Math.floor(Math.random() * members.length)];
+        let messageStr = "";
+        
+        if (Math.random() > 0.3) {
+            const action = actions[Math.floor(Math.random() * actions.length)];
+            messageStr = `${player1} ${action}`;
+        } else {
+            const quote = quotes[Math.floor(Math.random() * quotes.length)];
+            messageStr = `${player1}${quote}`;
+        }
+
+        text.innerText = messageStr;
+        
+        msg.appendChild(icon);
+        msg.appendChild(text);
+        container.appendChild(msg);
+        
+        setTimeout(() => {
+            if(container.contains(msg)) container.removeChild(msg);
+        }, 5000);
+        
+        setTimeout(spawnKillfeed, Math.random() * 6000 + 3000);
+    }
+    
+    setTimeout(spawnKillfeed, 2000);
+
+</script>
+</body>
+</html>

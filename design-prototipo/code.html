@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Trapalhados Squad | Rucha torto, banga errado.</title>
+<!-- Google Fonts & Icons -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&amp;family=Geist:wght@400;700&amp;family=JetBrains+Mono:wght@500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Config from Guidelines -->
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-variant": "#353534",
+                        "on-primary-fixed-variant": "#604100",
+                        "surface-container-high": "#2a2a2a",
+                        "inverse-primary": "#7f5700",
+                        "on-secondary": "#5f1500",
+                        "tertiary-fixed-dim": "#00daf3",
+                        "on-tertiary-fixed-variant": "#004f58",
+                        "on-secondary-container": "#fffbff",
+                        "surface-container-low": "#1c1b1b",
+                        "tertiary-container": "#00c9e0",
+                        "error-container": "#93000a",
+                        "outline": "#9e8e79",
+                        "tertiary-fixed": "#9cf0ff",
+                        "secondary-fixed": "#ffdbd1",
+                        "primary": "#ffca74",
+                        "inverse-surface": "#e5e2e1",
+                        "on-error": "#690005",
+                        "on-secondary-fixed": "#3b0900",
+                        "secondary-container": "#d73b00",
+                        "surface-container-highest": "#353534",
+                        "surface-bright": "#3a3939",
+                        "on-tertiary-fixed": "#001f24",
+                        "on-error-container": "#ffdad6",
+                        "surface-tint": "#ffba3b",
+                        "outline-variant": "#514533",
+                        "surface": "#131313",
+                        "background": "#131313",
+                        "primary-fixed-dim": "#ffba3b",
+                        "on-tertiary": "#00363d",
+                        "surface-container-lowest": "#0e0e0e",
+                        "secondary-fixed-dim": "#ffb5a0",
+                        "secondary": "#ffb5a0",
+                        "on-tertiary-container": "#00505a",
+                        "on-secondary-fixed-variant": "#862200",
+                        "on-primary": "#432c00",
+                        "inverse-on-surface": "#313030",
+                        "tertiary": "#33e6ff",
+                        "error": "#ffb4ab",
+                        "on-surface": "#e5e2e1",
+                        "primary-fixed": "#ffdead",
+                        "surface-container": "#201f1f",
+                        "surface-dim": "#131313",
+                        "on-primary-container": "#614200",
+                        "primary-container": "#f2a900",
+                        "on-primary-fixed": "#281900",
+                        "on-background": "#e5e2e1",
+                        "on-surface-variant": "#d6c4ac"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "margin-desktop": "48px",
+                        "unit": "4px",
+                        "gutter": "24px",
+                        "container-max": "1440px",
+                        "margin-mobile": "16px"
+                    },
+                    "fontFamily": {
+                        "headline-lg-mobile": ["Bebas Neue"],
+                        "body-md": ["Geist"],
+                        "body-lg": ["Geist"],
+                        "headline-lg": ["Bebas Neue"],
+                        "label-sm": ["JetBrains Mono"],
+                        "headline-md": ["Bebas Neue"],
+                        "display-lg": ["Bebas Neue"]
+                    },
+                    "fontSize": {
+                        "headline-lg-mobile": ["32px", { "lineHeight": "1.1", "fontWeight": "400" }],
+                        "body-md": ["16px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "body-lg": ["18px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "headline-lg": ["48px", { "lineHeight": "1.1", "fontWeight": "400" }],
+                        "label-sm": ["12px", { "lineHeight": "1.0", "letterSpacing": "0.05em", "fontWeight": "500" }],
+                        "headline-md": ["32px", { "lineHeight": "1.2", "fontWeight": "400" }],
+                        "display-lg": ["72px", { "lineHeight": "1.0", "letterSpacing": "0.02em", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        /* Custom Styles for "Tactical-Grunge" */
+        body {
+            background-color: theme('colors.background');
+            color: theme('colors.on-background');
+            overflow-x: hidden;
+        }
+
+        /* Grunge Overlay */
+        .grunge-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 10;
+            opacity: 0.15;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
+
+        /* Glassmorphic Card Base */
+        .glass-card {
+            background: rgba(26, 26, 26, 0.8);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Top Yellow Accent for Cards */
+        .glass-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: theme('colors.primary-container');
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .glass-card:hover::before {
+            opacity: 1;
+        }
+
+        /* Neon Glow Utility */
+        .glow-primary {
+            box-shadow: 0 0 15px rgba(242, 169, 0, 0.4);
+        }
+        .glow-primary-heavy {
+            box-shadow: 0 0 25px rgba(242, 169, 0, 0.7);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: theme('colors.surface-container-lowest');
+        }
+        ::-webkit-scrollbar-thumb {
+            background: theme('colors.primary-container');
+            border-radius: theme('borderRadius.full');
+        }
+
+        /* Scanline effect for inputs (not used here but good to have in CSS) */
+        .scanline:focus-within::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: theme('colors.tertiary');
+            box-shadow: 0 0 10px theme('colors.tertiary');
+            animation: scan 2s linear infinite;
+        }
+        @keyframes scan {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        /* Reveal Animations */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.5, 0, 0, 1);
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* 3D Tilt Wrapper */
+        .tilt-wrapper {
+            perspective: 1000px;
+        }
+        .tilt-element {
+            transition: transform 0.1s ease;
+            transform-style: preserve-3d;
+        }
+    </style>
+</head>
+<body class="font-body-md antialiased relative selection:bg-primary-container selection:text-on-primary-container">
+<!-- Global Shader Background -->
+<!-- STITCH_SHADER_START:ANIMATION_5 class="fixed inset-0 w-full h-full -z-10 opacity-60" -->
+<div class="fixed inset-0 w-full h-full -z-10 opacity-60" style="display:block;">
+<canvas id="shader-canvas-ANIMATION_5" style="display:block;width:100%;height:100%"></canvas>
+<script>
+(function() {
+  const canvas = document.getElementById('shader-canvas-ANIMATION_5');
+
+  // Sync the WebGL drawing-buffer size with the CSS-driven layout size.
+  // This fires on initial layout and whenever the element is resized.
+  function syncSize() {
+    const w = canvas.clientWidth  || 1280;
+    const h = canvas.clientHeight || 720;
+    if (canvas.width !== w || canvas.height !== h) {
+      canvas.width  = w;
+      canvas.height = h;
+    }
+  }
+  if (typeof ResizeObserver !== 'undefined') {
+    new ResizeObserver(syncSize).observe(canvas);
+  }
+  syncSize();
+
+  const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+  if (!gl) return;
+  const vs = `attribute vec2 a_position;
+varying vec2 v_texCoord;
+void main() {
+  v_texCoord = a_position * 0.5 + 0.5;
+  gl_Position = vec4(a_position, 0.0, 1.0);
+}`;
+  const fs = `precision highp float;
+uniform float u_time;
+uniform vec2 u_resolution;
+uniform vec2 u_mouse;
+varying vec2 v_texCoord;
+
+float hash(vec2 p) {
+    return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453123);
+}
+
+float noise(vec2 p) {
+    vec2 i = floor(p);
+    vec2 f = fract(p);
+    vec2 u = f * f * (3.0 - 2.0 * f);
+    return mix(mix(hash(i + vec2(0.0, 0.0)), hash(i + vec2(1.0, 0.0)), u.x),
+               mix(hash(i + vec2(0.0, 1.0)), hash(i + vec2(1.0, 1.0)), u.x), u.y);
+}
+
+void main() {
+    vec2 uv = v_texCoord;
+    vec2 p = uv * 2.0 - 1.0;
+    p.x *= u_resolution.x / u_resolution.y;
+
+    // Atmospheric smoke/fog effect
+    float n = noise(uv * 3.0 + u_time * 0.1);
+    n += 0.5 * noise(uv * 6.0 - u_time * 0.15);
+    n += 0.25 * noise(uv * 12.0 + u_time * 0.2);
+    
+    vec3 smokeColor = vec3(0.05, 0.05, 0.06); // Deep charcoal
+    vec3 baseColor = vec3(0.02, 0.02, 0.03); // Near black
+    
+    vec3 finalColor = mix(baseColor, smokeColor, n * 0.4);
+
+    // Floating particles (embers/dust)
+    float particles = 0.0;
+    for(float i = 0.0; i < 20.0; i++) {
+        vec2 pos = vec2(hash(vec2(i, 1.0)), hash(vec2(i, 2.0)));
+        pos.y = fract(pos.y + u_time * (0.05 + hash(vec2(i, 3.0)) * 0.05));
+        pos.x += sin(u_time * 0.5 + i) * 0.02;
+        
+        float dist = length(uv - pos);
+        float size = 0.001 + hash(vec2(i, 4.0)) * 0.002;
+        particles += smoothstep(size, 0.0, dist) * (0.5 + 0.5 * sin(u_time * 2.0 + i));
+    }
+    
+    vec3 accentColor = vec3(0.95, 0.66, 0.0); // PUBG Yellow #F2A900
+    finalColor += particles * accentColor * 0.8;
+
+    // Vignette
+    float vignette = 1.0 - smoothstep(0.5, 1.5, length(p));
+    finalColor *= vignette;
+
+    gl_FragColor = vec4(finalColor, 1.0);
+}`;
+  function cs(type, src) {
+    const s = gl.createShader(type);
+    gl.shaderSource(s, src);
+    gl.compileShader(s);
+    return s;
+  }
+  const prog = gl.createProgram();
+  gl.attachShader(prog, cs(gl.VERTEX_SHADER, vs));
+  gl.attachShader(prog, cs(gl.FRAGMENT_SHADER, fs));
+  gl.linkProgram(prog);
+  gl.useProgram(prog);
+  const buf = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1, 1,-1, -1,1, 1,1]), gl.STATIC_DRAW);
+  const pos = gl.getAttribLocation(prog, 'a_position');
+  gl.enableVertexAttribArray(pos);
+  gl.vertexAttribPointer(pos, 2, gl.FLOAT, false, 0, 0);
+  const uTime = gl.getUniformLocation(prog, 'u_time');
+  const uRes = gl.getUniformLocation(prog, 'u_resolution');
+  const uMouse = gl.getUniformLocation(prog, 'u_mouse');
+
+  // u_mouse is in pixel coordinates matching u_resolution (ShaderToy convention).
+  // Shaders that need normalized coords should use: u_mouse / u_resolution.
+  let mouse = { x: canvas.width / 2, y: canvas.height / 2 };
+  window.addEventListener('mousemove', (event) => {
+    const rect = canvas.getBoundingClientRect();
+    if (rect.width && rect.height) {
+      const nx = (event.clientX - rect.left) / rect.width;
+      const ny = 1.0 - (event.clientY - rect.top) / rect.height;
+      mouse.x = nx * canvas.width;
+      mouse.y = ny * canvas.height;
+    }
+  });
+
+  function render(t) {
+    if (typeof ResizeObserver === 'undefined') syncSize();
+    gl.viewport(0, 0, canvas.width, canvas.height);
+    if (uTime) gl.uniform1f(uTime, t * 0.001);
+    if (uRes) gl.uniform2f(uRes, canvas.width, canvas.height);
+    if (uMouse) gl.uniform2f(uMouse, mouse.x, mouse.y);
+    gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+    requestAnimationFrame(render);
+  }
+  render(0);
+})();
+</script>
+</div>
+<!-- STITCH_SHADER_END:ANIMATION_5 -->
+<!-- Grunge Overlay -->
+<div class="grunge-overlay"></div>
+<!-- === TopNavBar === -->
+<nav class="fixed top-0 w-full z-50 flex justify-between items-center px-margin-desktop h-20 border-b border-primary/20 bg-surface/80 backdrop-blur-xl shadow-[0_0_15px_rgba(242,169,0,0.2)]">
+<div class="flex items-center gap-4">
+<span class="font-headline-md text-headline-md text-primary dark:text-primary tracking-tighter italic">Trapalhados</span>
+</div>
+<div class="hidden md:flex gap-8 items-center">
+<!-- Labels from JSON: ["Social", "Clips", "Store", "About"] -->
+<!-- Active state: Assuming this is the main hub, "Social" or "About" could be active. Let's make "Social" active as it's a main focus. -->
+<a class="font-label-sm text-label-sm text-primary border-b-2 border-primary font-bold hover:bg-primary/10 hover:shadow-[0_0_20px_rgba(242,169,0,0.4)] px-4 py-2 uppercase transition-all scale-95 duration-150 ease-in-out" href="#social">Social</a>
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors hover:bg-primary/10 hover:shadow-[0_0_20px_rgba(242,169,0,0.4)] px-4 py-2 uppercase" href="#clips">Clips</a>
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors hover:bg-primary/10 hover:shadow-[0_0_20px_rgba(242,169,0,0.4)] px-4 py-2 uppercase" href="#store">Store</a>
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors hover:bg-primary/10 hover:shadow-[0_0_20px_rgba(242,169,0,0.4)] px-4 py-2 uppercase" href="#about">About</a>
+</div>
+<div>
+<button class="bg-primary-container text-on-primary-container font-headline-md text-[20px] uppercase px-6 py-2 rounded-sm transform skew-x-[-10deg] hover:scale-105 hover:glow-primary-heavy transition-all duration-200">
+<span class="inline-block skew-x-[10deg]">Join Squad</span>
+</button>
+</div>
+</nav>
+<!-- Main Content Canvas -->
+<main class="relative z-10 pt-20">
+<!-- === Hero Section === -->
+<section class="min-h-[90vh] flex flex-col items-center justify-center text-center px-margin-mobile md:px-margin-desktop relative">
+<div class="max-w-4xl mx-auto flex flex-col items-center gap-8 reveal">
+<!-- Main Logo -->
+<div class="w-64 h-64 md:w-96 md:h-96 relative drop-shadow-[0_0_30px_rgba(242,169,0,0.5)]">
+<img alt="Trapalhados Squad Logo" class="w-full h-full object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBJ-tI-ZCg8PV5xU517cnm4BfF1KRcasOsNaXlObW2eLQ7hNwsqhkB7qHWKz88QlMvhJwmtT5bOX38l9t5rt_GdxJrJ6pGJ27nWUg1tvhT1UhR-cDUMgE4_p7aiic9OAg0WCXI8alJItMsohHh0aXTAvsneedjWS15HAoQYB6JQhE1WF_SJZ9XQ4aS4-Ef077580nsRGMAj4etA-cE5qFJQO-mDKH33HBmxdWCTjc7PndDZIIoXW8sUYfyukXWq_LR_L33_Zte_6XI"/>
+</div>
+<div class="flex flex-col gap-4">
+<h1 class="font-display-lg text-display-lg text-on-background uppercase tracking-tighter drop-shadow-lg">
+                        Trapalhados
+                    </h1>
+<p class="font-headline-md text-headline-md text-primary-fixed-dim uppercase italic drop-shadow-md">
+                        Rucha torto. Banga errado. Resenha garantida.
+                    </p>
+</div>
+<button class="mt-8 bg-primary-container text-on-primary-container font-headline-lg text-headline-lg uppercase px-12 py-4 rounded-sm transform skew-x-[-15deg] hover:scale-110 glow-primary hover:glow-primary-heavy transition-all duration-300 relative group overflow-hidden">
+<div class="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out"></div>
+<span class="inline-block skew-x-[15deg] relative z-10">Join the Squad</span>
+</button>
+</div>
+</section>
+<!-- === Social Hub Section === -->
+<section class="py-32 px-margin-mobile md:px-margin-desktop bg-surface-container-low/50 relative" id="social">
+<div class="max-w-container-max mx-auto">
+<h2 class="font-headline-lg text-headline-lg text-primary uppercase mb-12 flex items-center gap-4 reveal">
+<span class="material-symbols-outlined text-[40px]" style="font-variation-settings: 'FILL' 1;">hub</span>
+                    Comms Center
+                </h2>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-gutter">
+<!-- Discord -->
+<div class="tilt-wrapper reveal">
+<a class="tilt-element glass-card p-8 flex flex-col items-center justify-center gap-6 h-64 group border-b-4 border-b-[#5865F2] hover:bg-[#5865F2]/10 transition-colors" href="#">
+<div class="w-20 h-20 rounded-full bg-[#5865F2]/20 flex items-center justify-center group-hover:scale-110 group-hover:shadow-[0_0_20px_rgba(88,101,242,0.6)] transition-all duration-300">
+<span class="material-symbols-outlined text-[48px] text-[#5865F2]" style="font-variation-settings: 'FILL' 1;">forum</span>
+</div>
+<span class="font-headline-md text-[24px] text-on-surface uppercase">Discord</span>
+<div class="absolute bottom-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-primary">arrow_forward</span>
+</div>
+</a>
+</div>
+<!-- YouTube -->
+<div class="tilt-wrapper reveal" style="transition-delay: 100ms;">
+<a class="tilt-element glass-card p-8 flex flex-col items-center justify-center gap-6 h-64 group border-b-4 border-b-[#FF0000] hover:bg-[#FF0000]/10 transition-colors" href="#">
+<div class="w-20 h-20 rounded-full bg-[#FF0000]/20 flex items-center justify-center group-hover:scale-110 group-hover:shadow-[0_0_20px_rgba(255,0,0,0.6)] transition-all duration-300">
+<span class="material-symbols-outlined text-[48px] text-[#FF0000]" style="font-variation-settings: 'FILL' 1;">play_circle</span>
+</div>
+<span class="font-headline-md text-[24px] text-on-surface uppercase">YouTube</span>
+<div class="absolute bottom-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-primary">arrow_forward</span>
+</div>
+</a>
+</div>
+<!-- TikTok -->
+<div class="tilt-wrapper reveal" style="transition-delay: 200ms;">
+<a class="tilt-element glass-card p-8 flex flex-col items-center justify-center gap-6 h-64 group border-b-4 border-b-[#00f2fe] hover:bg-[#00f2fe]/10 transition-colors" href="#">
+<div class="w-20 h-20 rounded-full bg-[#00f2fe]/20 flex items-center justify-center group-hover:scale-110 group-hover:shadow-[0_0_20px_rgba(0,242,254,0.6)] transition-all duration-300">
+<span class="material-symbols-outlined text-[48px] text-[#00f2fe]" style="font-variation-settings: 'FILL' 1;">music_video</span>
+</div>
+<span class="font-headline-md text-[24px] text-on-surface uppercase">TikTok</span>
+<div class="absolute bottom-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-primary">arrow_forward</span>
+</div>
+</a>
+</div>
+<!-- Instagram -->
+<div class="tilt-wrapper reveal" style="transition-delay: 300ms;">
+<a class="tilt-element glass-card p-8 flex flex-col items-center justify-center gap-6 h-64 group border-b-4 border-b-[#E1306C] hover:bg-[#E1306C]/10 transition-colors" href="#">
+<div class="w-20 h-20 rounded-full bg-[#E1306C]/20 flex items-center justify-center group-hover:scale-110 group-hover:shadow-[0_0_20px_rgba(225,48,108,0.6)] transition-all duration-300">
+<span class="material-symbols-outlined text-[48px] text-[#E1306C]" style="font-variation-settings: 'FILL' 1;">photo_camera</span>
+</div>
+<span class="font-headline-md text-[24px] text-on-surface uppercase">Instagram</span>
+<div class="absolute bottom-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-primary">arrow_forward</span>
+</div>
+</a>
+</div>
+</div>
+</div>
+</section>
+<!-- === Clips Wall Section === -->
+<section class="py-32 px-margin-mobile md:px-margin-desktop" id="clips">
+<div class="max-w-container-max mx-auto">
+<div class="flex justify-between items-end mb-12 reveal">
+<h2 class="font-headline-lg text-headline-lg text-primary uppercase flex items-center gap-4">
+<span class="material-symbols-outlined text-[40px]" style="font-variation-settings: 'FILL' 1;">movie</span>
+                        Fail Archive
+                    </h2>
+<a class="font-label-sm text-label-sm text-primary hover:text-primary-fixed-dim uppercase flex items-center gap-2 group" href="#">
+                        View All
+                        <span class="material-symbols-outlined group-hover:translate-x-1 transition-transform">arrow_forward</span>
+</a>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+<!-- Clip 1 -->
+<div class="glass-card rounded-lg overflow-hidden group cursor-pointer reveal">
+<div class="relative aspect-video overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A cinematic, high-action screenshot of a battle royale game featuring an explosion and a chaotic vehicle crash, neon yellow and deep charcoal tactical grunge aesthetic, 80s action movie vibe, highly detailed." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDO7cnOD7QcsbnxnUerehlfdjwzB0iGJsabtwX9d4G04vK_SqUrxsCHzUNLFL9k3h5X78ChTImEb9RDjxKqY5dcP_vp7rbfmicfjc6HF96PgPnpFbD0norDZAGBXQZpwOO-bPLb3C7kcmXHEW9RLXc36aUi3MkC-ah0I8a30VAMFJnag55c5CpWnNfFLcc1A5GhIso03qv4gAk2v-nMSQW7db9OZbQ8iU79c-tvPzv3aBaxMl440NKi1Srk5NGEdcq7F_pOrWw5EhI"/>
+<div class="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-colors flex items-center justify-center">
+<div class="w-16 h-16 rounded-full bg-primary-container/80 flex items-center justify-center backdrop-blur-sm group-hover:scale-125 group-hover:shadow-[0_0_30px_rgba(242,169,0,0.8)] transition-all duration-300">
+<span class="material-symbols-outlined text-[32px] text-on-primary-container" style="font-variation-settings: 'FILL' 1;">play_arrow</span>
+</div>
+</div>
+<!-- Dog Tag Chip -->
+<div class="absolute top-4 left-4 bg-surface-variant text-primary font-label-sm text-label-sm px-3 py-1 rounded-sm border-l-2 border-primary uppercase shadow-md flex items-center gap-2">
+<span class="w-1.5 h-1.5 rounded-full bg-primary block"></span> SQUAD WIPE
+                            </div>
+</div>
+<div class="p-6">
+<h3 class="font-headline-md text-[20px] text-on-surface uppercase mb-2">Pochinki Pan Panic</h3>
+<p class="font-body-md text-on-surface-variant text-sm">When the whole squad lands same roof and only finds pans.</p>
+</div>
+</div>
+<!-- Clip 2 -->
+<div class="glass-card rounded-lg overflow-hidden group cursor-pointer reveal" style="transition-delay: 100ms;">
+<div class="relative aspect-video overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A wide shot in a gritty, realistic battle royale environment showing a character hilariously missing a sniper shot while falling off a building, sunset lighting, high contrast tactical grunge aesthetic, deep blacks and sharp neon yellow highlights." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD6OndrdMLHbfA29B3Rgv4qB1Kar8p2K-QYQ5kGRdT26bJV3dqdt6K1BQlzsG7sxQIWjUQeENEgqTmpF8ALhvBeAwv1wJCZq0pQ388qeMFBSBcYP5rr9cY6SH3whn9KSnY9Woh0fa5Naw8mBu0vRAGcukT5f6crL4XDEjKIgFfS4XZ1J9sZbfppU00zVblMNzzOuTDBXtPGegrt7CxyEPPpJh-_xOuH-1HKlDS9kQwiUjv_eP4VwgrVu0fiBHbD6pIcep-E-A_YEww"/>
+<div class="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-colors flex items-center justify-center">
+<div class="w-16 h-16 rounded-full bg-primary-container/80 flex items-center justify-center backdrop-blur-sm group-hover:scale-125 group-hover:shadow-[0_0_30px_rgba(242,169,0,0.8)] transition-all duration-300">
+<span class="material-symbols-outlined text-[32px] text-on-primary-container" style="font-variation-settings: 'FILL' 1;">play_arrow</span>
+</div>
+</div>
+<div class="absolute top-4 left-4 bg-surface-variant text-error font-label-sm text-label-sm px-3 py-1 rounded-sm border-l-2 border-error uppercase shadow-md flex items-center gap-2">
+<span class="w-1.5 h-1.5 rounded-full bg-error block"></span> FATAL ERROR
+                            </div>
+</div>
+<div class="p-6">
+<h3 class="font-headline-md text-[20px] text-on-surface uppercase mb-2">Sniper Elite... Not</h3>
+<p class="font-body-md text-on-surface-variant text-sm">300m drop? Sure. Hitting the shot? Absolutely not.</p>
+</div>
+</div>
+<!-- Clip 3 -->
+<div class="glass-card rounded-lg overflow-hidden group cursor-pointer reveal" style="transition-delay: 200ms;">
+<div class="relative aspect-video overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A chaotic scene inside a cramped bunker in a battle royale game, showing multiple characters caught in a grenade explosion, vibrant orange and neon yellow explosion effects against dark grunge metal textures, highly stylized and energetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDiOOhkgvahJk5XIvI_urJiQSWmPIeeF9TdFZ9R4UfRk7CKcIHh_EOlUZjJSHVp1pWiQFNPxjNJJi65ugDNtYGnma6sDrE3aCMBLITPUgd50LMWeUf0wb-N6xV8QaNQ_aet-7ustZdWPgEE6VaRKOlgn-cogsOVBXkmu_cK08XtvLDN6kThnLfk0j8gIqwX_ydMe7g4c8wdQYR8Ye1UIui6aJZuTkz8SI5OUXt5-m9lvWaFOzmv_s5XFg5yPUt98NWM3thi2CLpTUE"/>
+<div class="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-colors flex items-center justify-center">
+<div class="w-16 h-16 rounded-full bg-primary-container/80 flex items-center justify-center backdrop-blur-sm group-hover:scale-125 group-hover:shadow-[0_0_30px_rgba(242,169,0,0.8)] transition-all duration-300">
+<span class="material-symbols-outlined text-[32px] text-on-primary-container" style="font-variation-settings: 'FILL' 1;">play_arrow</span>
+</div>
+</div>
+<div class="absolute top-4 left-4 bg-surface-variant text-tertiary font-label-sm text-label-sm px-3 py-1 rounded-sm border-l-2 border-tertiary uppercase shadow-md flex items-center gap-2">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary block"></span> BIG BRAIN
+                            </div>
+</div>
+<div class="p-6">
+<h3 class="font-headline-md text-[20px] text-on-surface uppercase mb-2">Bunker Bounce</h3>
+<p class="font-body-md text-on-surface-variant text-sm">Frag out! Wait, it bounced back.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- === Footer === -->
+<footer class="w-full py-12 px-margin-desktop flex flex-col md:flex-row justify-between items-center gap-gutter bg-surface-container-lowest dark:bg-surface-container-lowest border-t border-primary/30 mt-32 relative z-10">
+<div class="flex flex-col items-center md:items-start gap-2">
+<span class="font-headline-lg text-headline-lg text-primary uppercase">Trapalhados</span>
+<span class="font-body-md text-body-md text-on-surface-variant">© 2024 Trapalhados Squad. Rucha torto, banga errado.</span>
+</div>
+<div class="flex flex-wrap justify-center gap-6">
+<!-- Links from JSON: ["Discord", "TikTok", "Instagram", "YouTube", "Terms", "Privacy"] -->
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary hover:glow-sm transition-all duration-300 uppercase" href="#">Discord</a>
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary hover:glow-sm transition-all duration-300 uppercase" href="#">TikTok</a>
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary hover:glow-sm transition-all duration-300 uppercase" href="#">Instagram</a>
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary hover:glow-sm transition-all duration-300 uppercase" href="#">YouTube</a>
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary hover:glow-sm transition-all duration-300 uppercase" href="#">Terms</a>
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary hover:glow-sm transition-all duration-300 uppercase" href="#">Privacy</a>
+</div>
+</footer>
+<!-- Interactive Scripts -->
+<script>
+        // Scroll Reveal Logic
+        function reveal() {
+            var reveals = document.querySelectorAll(".reveal");
+            for (var i = 0; i < reveals.length; i++) {
+                var windowHeight = window.innerHeight;
+                var elementTop = reveals[i].getBoundingClientRect().top;
+                var elementVisible = 150;
+                if (elementTop < windowHeight - elementVisible) {
+                    reveals[i].classList.add("active");
+                }
+            }
+        }
+        window.addEventListener("scroll", reveal);
+        // Trigger once on load
+        reveal();
+
+        // 3D Tilt Effect for Social Cards
+        const tiltWrappers = document.querySelectorAll('.tilt-wrapper');
+        
+        tiltWrappers.forEach(wrapper => {
+            const element = wrapper.querySelector('.tilt-element');
+            
+            wrapper.addEventListener('mousemove', (e) => {
+                const rect = wrapper.getBoundingClientRect();
+                const x = e.clientX - rect.left; // x position within the element.
+                const y = e.clientY - rect.top;  // y position within the element.
+                
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                
+                const rotateX = ((y - centerY) / centerY) * -10; // Max rotation 10deg
+                const rotateY = ((x - centerX) / centerX) * 10;
+                
+                element.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
+            });
+            
+            wrapper.addEventListener('mouseleave', () => {
+                element.style.transform = `rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`;
+                // Smooth transition back
+                element.style.transition = 'transform 0.5s ease';
+                setTimeout(() => {
+                    element.style.transition = 'transform 0.1s ease'; // reset for mousemove
+                }, 500);
+            });
+        });
+    </script>
+</body></html>
