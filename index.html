@@ -938,7 +938,8 @@ void main() {
 
 <script>
     function copyInvite() {
-        navigator.clipboard.writeText("https://discord.gg/SfWJPGzV93").then(() => {
+        const shareText = "Vem ver esse clã de PUBG! Rucha torto, banga errado. Entra aí no QG dos Trapalhados: https://discord.gg/SfWJPGzV93";
+        navigator.clipboard.writeText(shareText).then(() => {
             const tooltip = document.getElementById('copy-tooltip');
             const originalText = tooltip.innerText;
             tooltip.innerText = "Copiado!";

@@ -336,7 +336,7 @@ void main() {
     <div class="flex items-center gap-4">
         <!-- REDUNDANT TEXT REMOVED -->
         <a href="#" class="cursor-pointer">
-            <img src="brand/logo_ingles.png" alt="Trapalhados Logo" class="w-16 h-16 object-contain hidden md:block">
+            <img src="brand/Logo_Ingles.png" alt="Trapalhados Logo" class="w-16 h-16 object-contain hidden md:block">
         </a>
     </div>
     
@@ -395,7 +395,7 @@ void main() {
                     </div>
 
                     <!-- Logo superior centralizado -->
-                    <img src="brand/logo_ingles.png" alt="Logo Trapalhados" class="absolute top-0 left-1/2 w-64 md:w-[350px] drop-shadow-[0_15px_25px_rgba(0,0,0,0.9)]" style="transform: translate(-50%, -60%) translateZ(90px);">
+                    <img src="brand/Logo_Ingles.png" alt="Logo Trapalhados" class="absolute top-0 left-1/2 w-64 md:w-[350px] drop-shadow-[0_15px_25px_rgba(0,0,0,0.9)]" style="transform: translate(-50%, -60%) translateZ(90px);">
                 </div>
             </div>
             
@@ -938,7 +938,8 @@ void main() {
 
 <script>
     function copyInvite() {
-        navigator.clipboard.writeText("https://discord.gg/SfWJPGzV93").then(() => {
+        const shareText = "Come check out this PUBG clan! We rush wrong and shoot crooked. Join the Trapalhados HQ: https://discord.gg/SfWJPGzV93";
+        navigator.clipboard.writeText(shareText).then(() => {
             const tooltip = document.getElementById('copy-tooltip');
             const originalText = tooltip.innerText;
             tooltip.innerText = "Copied!";
