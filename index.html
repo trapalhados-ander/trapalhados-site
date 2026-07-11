@@ -838,17 +838,17 @@ void main() {
     
     setTimeout(spawnKillfeed, 2000);
 
-    // Fetch Discord Live Status
+    // Fetch Discord Live Status via Invite API
     document.addEventListener('DOMContentLoaded', () => {
-        const serverId = '1367853860340633642';
-        fetch(`https://discord.com/api/guilds/${serverId}/widget.json`)
+        const inviteCode = 'SfWJPGzV93';
+        fetch(`https://discord.com/api/invites/${inviteCode}?with_counts=true`)
             .then(res => {
-                if (!res.ok) throw new Error('Widget desabilitado ou erro na API');
+                if (!res.ok) throw new Error('Erro na API de Convite do Discord');
                 return res.json();
             })
             .then(data => {
-                if (data && data.presence_count !== undefined) {
-                    document.getElementById('discord-online-count').textContent = data.presence_count;
+                if (data && data.approximate_presence_count !== undefined) {
+                    document.getElementById('discord-online-count').textContent = data.approximate_presence_count;
                     const widget = document.getElementById('discord-status-widget');
                     widget.classList.remove('hidden');
                     // Slight delay for animation
