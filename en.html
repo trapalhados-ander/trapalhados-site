@@ -360,25 +360,24 @@ void main() {
 <main class="relative z-10 pt-20">
 
     <!-- === Hero Section === -->
-    <section class="min-h-[90vh] flex flex-col items-center justify-center text-center px-margin-mobile md:px-margin-desktop relative pt-8 md:pt-16">
-        <div class="w-full max-w-container-max mx-auto flex flex-col items-center gap-8 md:gap-12 reveal">
+    <section class="min-h-[90vh] flex flex-col items-center justify-center text-center px-margin-mobile md:px-margin-desktop relative pt-8 md:pt-16 bg-cover bg-center" style="background-image: url('brand/Fundo_Banner.png');">
+        <!-- Overlays para transição suave com o resto da página -->
+        <div class="absolute inset-0 bg-background/20 z-0"></div>
+        <div class="absolute inset-0 bg-gradient-to-b from-transparent to-background z-0"></div>
+        
+        <div class="w-full max-w-container-max mx-auto flex flex-col items-center gap-8 md:gap-12 reveal relative z-10">
             
             <!-- Squad Banner (Dinâmico em Camadas) -->
-            <div class="w-full rounded-2xl tilt-wrapper relative z-10">
-                <div class="tilt-element rounded-2xl glass-card border-2 border-primary/40 drop-shadow-[0_0_50px_rgba(242,169,0,0.4)] relative w-full h-[400px] md:h-[600px]" style="transform-style: preserve-3d;">
+            <div class="w-full max-w-5xl rounded-2xl tilt-wrapper relative z-10 mt-12">
+                <div class="tilt-element relative w-full h-[350px] md:h-[500px]" style="transform-style: preserve-3d;">
                     
-                    <!-- Fundo -->
-                    <div class="absolute inset-0 w-full h-full rounded-2xl overflow-hidden" style="transform: translateZ(-30px);">
-                        <img src="brand/Fundo_Banner.png" alt="Fundo" class="w-full h-full object-cover scale-110">
-                    </div>
-                    
-                    <!-- Squad Dinâmico -->
-                    <div id="dynamic-squad" class="absolute inset-0 w-full h-full flex items-end justify-center -space-x-8 md:-space-x-12 pb-4" style="transform: translateZ(40px);">
+                    <!-- Squad Dinâmico (V-Formation) -->
+                    <div id="dynamic-squad" class="absolute inset-0 w-full h-full flex items-end justify-center -space-x-12 md:-space-x-20 pb-4" style="transform: translateZ(40px);">
                         <!-- Personagens inseridos via JS -->
                     </div>
 
-                    <!-- Logo -->
-                    <img src="brand/1.png" alt="Logo Trapalhados" class="absolute top-1/2 left-1/2 w-48 md:w-96 drop-shadow-[0_10px_20px_rgba(0,0,0,0.9)]" style="transform: translate(-50%, -50%) translateZ(90px);">
+                    <!-- Logo superior centralizado -->
+                    <img src="brand/Logo.png" alt="Logo Trapalhados" class="absolute top-0 left-1/2 w-72 md:w-[450px] drop-shadow-[0_15px_25px_rgba(0,0,0,0.9)]" style="transform: translate(-50%, -40%) translateZ(90px);">
                 </div>
             </div>
             
@@ -632,23 +631,34 @@ void main() {
     document.addEventListener("DOMContentLoaded", () => {
         const squadContainer = document.getElementById("dynamic-squad");
         if(squadContainer) {
+            // Ordem fixa para a Formação em V (Ander no centro)
             const characters = [
-                "Alexandre.png", "Ander.png", "Diguuh.png", 
-                "Gui.png", "Lucaum.png", "Nim.png", "Tripa_Seca.png"
+                "Tripa_Seca.png", // L3
+                "Gui.png",        // L2
+                "Diguuh.png",     // L1
+                "Ander.png",      // Centro
+                "Alexandre.png",  // R1
+                "Lucaum.png",     // R2
+                "Nim.png"         // R3
             ];
-            
-            // Randomize array
-            characters.sort(() => Math.random() - 0.5);
             
             characters.forEach((char, i) => {
                 const img = document.createElement("img");
                 img.src = `brand/${char}`;
                 
-                // Apply classes for styling and hover effects
-                img.className = "squad-char h-[60%] md:h-[90%] object-contain relative filter drop-shadow-[0_10px_10px_rgba(0,0,0,0.6)] cursor-crosshair";
+                // Lógica da Formação em V
+                const dist = Math.abs(i - 3); // 0 para o centro, até 3 para as pontas
+                const zIndex = 20 - dist;     // Centro na frente
+                const scale = 1 - (dist * 0.1); // Menores nas pontas
+                const marginBottom = dist * 20; // Mais altos (ou passos para trás) nas pontas
                 
-                // Randomize z-index slightly to mix overlaps organically
-                img.style.zIndex = Math.floor(Math.random() * 20);
+                // Apply classes for styling and hover effects
+                img.className = "squad-char h-[70%] md:h-[100%] object-contain relative filter drop-shadow-[0_15px_15px_rgba(0,0,0,0.8)] cursor-crosshair";
+                
+                img.style.zIndex = zIndex;
+                img.style.transformOrigin = "bottom center";
+                img.style.transform = `scale(${scale})`;
+                img.style.marginBottom = `${marginBottom}px`;
                 
                 // Randomize the breathing animation slightly so they don't move exactly together
                 img.style.animationDuration = `${3 + Math.random() * 2}s`;
