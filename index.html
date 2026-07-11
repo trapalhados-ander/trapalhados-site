@@ -780,26 +780,22 @@ void main() {
         }, 100);
     }
 
-    // Expanded Killfeed Simulation for 11 Members
-    const members = ["Ander", "Tripa Seca", "Alexandre", "Gui", "Nim", "Lucaum", "Diguuh", "Vini", "MTzinn", "Faisca", "Rafael"];
-    const actions = [
-        "morreu por queda (veículo).",
-        "abateu si mesmo com granada.",
-        "foi engolido pela Zona Azul.",
-        "bateu o Dacia na árvore.",
-        "fritou o time com Molotov.",
-        "atirou na própria panela e morreu.",
-        "esquivou da bala com a cabeça.",
-        "deixou o companheiro sangrando até a morte."
-    ];
-    const quotes = [
-        ": 'Tem um aqui, deitei! Pera, é nosso.'",
-        ": 'Alguém tem bala verde?'",
-        ": 'Deixa que eu dirijo!' (Boom)",
-        ": 'Nossa, lagou aqui no meio da trocação...'",
-        ": 'Cadê vocês? Caí no prédio errado!'"
-    ];
+    // Killfeed Dinâmico via Discord
+    const fallbackMembers = ["Ander", "Tripa Seca", "Alexandre", "Gui", "Nim", "Lucaum", "Diguuh", "Vini", "MTzinn", "Faisca", "Rafael"];
+    const fallbackActions = ["morreu por queda (veículo).", "abateu si mesmo com granada.", "foi engolido pela Zona Azul.", "bateu o Dacia na árvore.", "fritou o time com Molotov.", "atirou na própria panela e morreu."];
     
+    let discordMessages = [];
+
+    // Busca as mensagens no carregamento
+    fetch('/.netlify/functions/killfeed')
+        .then(res => res.json())
+        .then(data => {
+            if (data && data.messages && data.messages.length > 0) {
+                discordMessages = data.messages;
+            }
+        })
+        .catch(err => console.error("Erro ao carregar frases do Discord:", err));
+
     function spawnKillfeed() {
         const container = document.getElementById('killfeed');
         const msg = document.createElement('div');
@@ -811,16 +807,21 @@ void main() {
         
         const text = document.createElement('span');
         
-        // Randomly pick to show an action or a funny quote
-        const player1 = members[Math.floor(Math.random() * members.length)];
         let messageStr = "";
-        
-        if (Math.random() > 0.3) {
-            const action = actions[Math.floor(Math.random() * actions.length)];
-            messageStr = `${player1} ${action}`;
+
+        if (discordMessages.length > 0) {
+            // Sorteia uma frase real do Discord
+            messageStr = discordMessages[Math.floor(Math.random() * discordMessages.length)];
         } else {
-            const quote = quotes[Math.floor(Math.random() * quotes.length)];
-            messageStr = `${player1}${quote}`;
+            // Fallback (se o discord falhar ou ainda estiver carregando)
+            const player1 = fallbackMembers[Math.floor(Math.random() * fallbackMembers.length)];
+            const action = fallbackActions[Math.floor(Math.random() * fallbackActions.length)];
+            messageStr = `${player1} ${action}`;
+        }
+
+        // Limita o tamanho para o Killfeed não quebrar o layout da tela
+        if(messageStr.length > 80) {
+            messageStr = messageStr.substring(0, 80) + "...";
         }
 
         text.innerText = messageStr;
