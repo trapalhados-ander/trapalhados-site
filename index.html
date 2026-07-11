@@ -316,7 +316,16 @@ void main() {
         <a class="font-label-sm text-primary border-b-2 border-primary font-bold hover:bg-primary/10 px-3 py-2 uppercase transition-all duration-150" href="#social">QG</a>
     </div>
 
-    <div class="flex items-center gap-4">
+    <div class="flex items-center gap-3 md:gap-4">
+        <!-- Discord Live Status Widget (Header) -->
+        <div id="discord-status-widget" class="flex items-center gap-2 text-on-surface opacity-0 transition-opacity duration-700 bg-surface-variant/50 px-2 py-1 md:px-3 md:py-1.5 rounded border border-primary/20 hidden">
+            <div class="relative flex h-2 w-2">
+                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                <span class="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+            </div>
+            <span class="font-label-sm text-[10px] md:text-xs uppercase tracking-wider"><span id="discord-online-count" class="text-primary font-bold">...</span> ON</span>
+        </div>
+
         <!-- Bandeirinha -->
         <button class="flex items-center gap-2 hover:bg-surface-variant px-2 py-1 rounded transition-colors" title="PT-BR">
             <span class="text-xl">🇧🇷</span>
@@ -352,15 +361,6 @@ void main() {
                 <div class="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out"></div>
                 <span class="inline-block skew-x-[15deg] relative z-10">Entrar no Esquadrão</span>
             </a>
-
-            <!-- Discord Live Status Widget -->
-            <div id="discord-status-widget" class="mt-4 md:mt-6 glass-card px-6 py-3 rounded-lg flex items-center gap-4 text-on-surface opacity-0 translate-y-4 transition-all duration-700 hidden">
-                <div class="relative flex h-3 w-3">
-                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                    <span class="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
-                </div>
-                <span class="font-label-sm text-sm uppercase tracking-wider"><span id="discord-online-count" class="text-primary font-bold text-lg">...</span> Jogadores Online</span>
-            </div>
 
         </div>
     </section>
