@@ -12,7 +12,8 @@ module.exports = async (req, res) => {
     let SQUAD = [];
     try {
         const discordRes = await fetch(`https://discord.com/api/v10/channels/${MEMBERS_CHANNEL_ID}/messages?limit=50`, {
-            headers: { 'Authorization': `Bot ${DISCORD_BOT_TOKEN}` }
+            headers: { 'Authorization': `Bot ${DISCORD_BOT_TOKEN}` },
+            cache: 'no-store'
         });
         if (discordRes.ok) {
             const data = await discordRes.json();
@@ -41,7 +42,8 @@ module.exports = async (req, res) => {
     let currentDB = [];
     try {
         const dbRes = await fetch(`https://discord.com/api/v10/channels/${DB_CHANNEL_ID}/messages?limit=1`, {
-            headers: { 'Authorization': `Bot ${DISCORD_BOT_TOKEN}` }
+            headers: { 'Authorization': `Bot ${DISCORD_BOT_TOKEN}` },
+            cache: 'no-store'
         });
         if (dbRes.ok) {
             const dbData = await dbRes.json();
@@ -76,7 +78,8 @@ module.exports = async (req, res) => {
     let currentSeasonId = "";
     try {
         const seasonRes = await fetch(`https://api.pubg.com/shards/steam/seasons`, {
-            headers: { 'Authorization': `Bearer ${PUBG_API_KEY}`, 'Accept': 'application/vnd.api+json' }
+            headers: { 'Authorization': `Bearer ${PUBG_API_KEY}`, 'Accept': 'application/vnd.api+json' },
+            cache: 'no-store'
         });
         if (seasonRes.ok) {
             const seasonData = await seasonRes.json();
@@ -89,7 +92,8 @@ module.exports = async (req, res) => {
     
     let playerIds = {};
     const playerRes = await fetch(`https://api.pubg.com/shards/steam/players?filter[playerNames]=${namesChunk}`, {
-        headers: { 'Authorization': `Bearer ${PUBG_API_KEY}`, 'Accept': 'application/vnd.api+json' }
+        headers: { 'Authorization': `Bearer ${PUBG_API_KEY}`, 'Accept': 'application/vnd.api+json' },
+        cache: 'no-store'
     });
     
     if (playerRes.ok) {
@@ -119,7 +123,8 @@ module.exports = async (req, res) => {
 
             // Lifetime Stats
             const statsRes = await fetch(`https://api.pubg.com/shards/steam/players/${accountId}/seasons/lifetime`, {
-                headers: { 'Authorization': `Bearer ${PUBG_API_KEY}`, 'Accept': 'application/vnd.api+json' }
+                headers: { 'Authorization': `Bearer ${PUBG_API_KEY}`, 'Accept': 'application/vnd.api+json' },
+                cache: 'no-store'
             });
 
             if (statsRes.ok) {
@@ -145,7 +150,8 @@ module.exports = async (req, res) => {
             // Weapon Mastery
             let favWeapon = "Desconhecida";
             const weaponRes = await fetch(`https://api.pubg.com/shards/steam/players/${accountId}/weapon_mastery`, {
-                headers: { 'Authorization': `Bearer ${PUBG_API_KEY}`, 'Accept': 'application/vnd.api+json' }
+                headers: { 'Authorization': `Bearer ${PUBG_API_KEY}`, 'Accept': 'application/vnd.api+json' },
+                cache: 'no-store'
             });
 
             if (weaponRes.ok) {
@@ -168,7 +174,8 @@ module.exports = async (req, res) => {
             let rankSubTier = "";
             if (currentSeasonId) {
                 const rankedRes = await fetch(`https://api.pubg.com/shards/steam/players/${accountId}/seasons/${currentSeasonId}/ranked`, {
-                    headers: { 'Authorization': `Bearer ${PUBG_API_KEY}`, 'Accept': 'application/vnd.api+json' }
+                    headers: { 'Authorization': `Bearer ${PUBG_API_KEY}`, 'Accept': 'application/vnd.api+json' },
+                    cache: 'no-store'
                 });
                 
                 if (rankedRes.ok) {
