@@ -740,39 +740,52 @@ void main() {
         }, 100);
     }
 
-    // Carregar Members dinamicamente do Discord
+    // Carregar Members dinamicamente do Discord e cruzar com estatísticas do PUBG
     function loadMembers() {
         const grid = document.getElementById('members-grid');
-        fetch('/api/members')
-            .then(res => res.json())
-            .then(data => {
-                if (data.members && data.members.length > 0) {
-                    grid.innerHTML = '';
-                    const borderColors = ['border-t-primary', 'border-t-error', 'border-t-tertiary'];
-                    const textColors = ['text-primary', 'text-error', 'text-tertiary'];
+        
+        Promise.all([
+            fetch('/api/members').then(res => res.json()).catch(() => ({ members: [] })),
+            fetch('/api/get-pubg-stats').then(res => res.json()).catch(() => ({ members: [] }))
+        ])
+        .then(([discordData, pubgData]) => {
+            let members = discordData.members || [];
+            let pubgStats = pubgData.members || [];
 
-                    data.members.forEach((member, index) => {
-                        const bColor = borderColors[index % 3];
-                        const tColor = textColors[index % 3];
-                        
-                        const imageHTML = member.imageUrl 
-                            ? `<div class="w-32 h-32 rounded-full mb-4 mx-auto overflow-hidden shadow-lg border-2 border-primary/50"><img src="${member.imageUrl}" class="w-full h-full object-cover"></div>` 
-                            : `<div class="w-32 h-32 rounded-full bg-surface-variant mb-4 flex items-center justify-center shadow-lg border-2 border-primary/50 overflow-hidden mx-auto"><span class="material-symbols-outlined text-[64px] text-on-surface-variant">person</span></div>`;
+            if (members.length > 0) {
+                grid.innerHTML = '';
+                const borderColors = ['border-t-primary', 'border-t-error', 'border-t-tertiary'];
+                const textColors = ['text-primary', 'text-error', 'text-tertiary'];
 
-                        grid.innerHTML += `
-                            <div class="glass-card rounded-lg p-6 flex flex-col items-center gap-4 text-center border-t-4 ${bColor}">
-                                <div>
-                                    ${imageHTML}
-                                    <h3 class="font-headline-md text-[24px] text-on-surface uppercase drop-shadow-md">${member.nome}</h3>
-                                    <div class="bg-surface-variant ${tColor} font-label-sm px-2 py-1 rounded uppercase inline-block mb-4">${member.funcao}</div>
-                                    <ul class="text-left font-body-md text-sm text-on-surface-variant space-y-2 w-full border-t border-surface-variant pt-4">
-                                        <li><strong class="text-on-surface">KD:</strong> ${member.kd}</li>
-                                        <li><strong class="text-on-surface">Arma:</strong> ${member.arma}</li>
-                                    </ul>
-                                </div>
+                members.forEach((member, index) => {
+                    // Cruzar dados do PUBG se o nick for igual (ignorando maiúsculas)
+                    const stats = pubgStats.find(p => p.nome.toLowerCase() === member.nome.toLowerCase());
+                    if (stats) {
+                        member.kd = stats.kd;
+                        member.arma = stats.arma;
+                    }
+
+                    const bColor = borderColors[index % 3];
+                    const tColor = textColors[index % 3];
+                    
+                    const imageHTML = member.imageUrl 
+                        ? `<div class="w-32 h-32 rounded-full mb-4 mx-auto overflow-hidden shadow-lg border-2 border-primary/50"><img src="${member.imageUrl}" class="w-full h-full object-cover"></div>` 
+                        : `<div class="w-32 h-32 rounded-full bg-surface-variant mb-4 flex items-center justify-center shadow-lg border-2 border-primary/50 overflow-hidden mx-auto"><span class="material-symbols-outlined text-[64px] text-on-surface-variant">person</span></div>`;
+
+                    grid.innerHTML += `
+                        <div class="glass-card rounded-lg p-6 flex flex-col items-center gap-4 text-center border-t-4 ${bColor}">
+                            <div>
+                                ${imageHTML}
+                                <h3 class="font-headline-md text-[24px] text-on-surface uppercase drop-shadow-md">${member.nome}</h3>
+                                <div class="bg-surface-variant ${tColor} font-label-sm px-2 py-1 rounded uppercase inline-block mb-4">${member.funcao}</div>
+                                <ul class="text-left font-body-md text-sm text-on-surface-variant space-y-2 w-full border-t border-surface-variant pt-4">
+                                    <li><strong class="text-on-surface">Real KD:</strong> ${member.kd}</li>
+                                    <li><strong class="text-on-surface">Weapon (PUBG):</strong> ${member.arma}</li>
+                                </ul>
                             </div>
-                        `;
-                    });
+                        </div>
+                    `;
+                });
                 } else {
                     grid.innerHTML = '<div class="col-span-full text-center text-on-surface-variant">No members found or channel not configured.</div>';
                 }
