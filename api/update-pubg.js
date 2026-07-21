@@ -124,21 +124,20 @@ module.exports = async (req, res) => {
 
             if (statsRes.ok) {
                 const statsData = await statsRes.json();
-                const squadFpp = statsData.data.attributes.gameModeStats['squad-fpp'] || {};
                 const squadTpp = statsData.data.attributes.gameModeStats['squad'] || {};
                 
-                const kills = (squadFpp.kills || 0) + (squadTpp.kills || 0);
-                const wins = (squadFpp.wins || 0) + (squadTpp.wins || 0);
-                const matches = (squadFpp.roundsPlayed || 0) + (squadTpp.roundsPlayed || 0);
+                const kills = squadTpp.kills || 0;
+                const wins = squadTpp.wins || 0;
+                const matches = squadTpp.roundsPlayed || 0;
                 const deaths = matches - wins;
-                const headshotKills = (squadFpp.headshotKills || 0) + (squadTpp.headshotKills || 0);
+                const headshotKills = squadTpp.headshotKills || 0;
                 
                 if (deaths > 0) realKd = (kills / deaths).toFixed(2);
                 else if (kills > 0) realKd = kills.toFixed(2);
                 
                 headshotPercent = kills > 0 ? ((headshotKills / kills) * 100).toFixed(1) : "0.0";
-                longestKill = Math.max(squadFpp.longestKill || 0, squadTpp.longestKill || 0);
-                maxKills = Math.max(squadFpp.roundMostKills || 0, squadTpp.roundMostKills || 0);
+                longestKill = squadTpp.longestKill || 0;
+                maxKills = squadTpp.roundMostKills || 0;
             } else {
                 errors.push(`Erro Stats ${playerObj.apelido}: ${statsRes.status}`);
             }
@@ -175,21 +174,17 @@ module.exports = async (req, res) => {
                 if (rankedRes.ok) {
                     const rankedData = await rankedRes.json();
                     if (rankedData.data && rankedData.data.attributes && rankedData.data.attributes.rankedGameModeStats) {
-                        const rankedSquadFpp = rankedData.data.attributes.rankedGameModeStats['squad-fpp'] || {};
                         const rankedSquadTpp = rankedData.data.attributes.rankedGameModeStats['squad'] || {};
                         
-                        // Verificar patentes
-                        if (rankedSquadFpp.currentTier) {
-                            rankTier = rankedSquadFpp.currentTier.tier; 
-                            rankSubTier = rankedSquadFpp.currentTier.subTier;
-                        } else if (rankedSquadTpp.currentTier) {
+                        // Verificar patentes (Apenas TPP)
+                        if (rankedSquadTpp.currentTier) {
                             rankTier = rankedSquadTpp.currentTier.tier;
                             rankSubTier = rankedSquadTpp.currentTier.subTier;
                         }
 
-                        // Verificar records de kills/long range na Ranked e sobrepor se for maior
-                        longestKill = Math.max(longestKill, rankedSquadFpp.longestKill || 0, rankedSquadTpp.longestKill || 0);
-                        maxKills = Math.max(maxKills, rankedSquadFpp.roundMostKills || 0, rankedSquadTpp.roundMostKills || 0);
+                        // Verificar records de kills/long range na Ranked TPP
+                        longestKill = Math.max(longestKill, rankedSquadTpp.longestKill || 0);
+                        maxKills = Math.max(maxKills, rankedSquadTpp.roundMostKills || 0);
                     }
                 }
             }
