@@ -48,7 +48,10 @@ module.exports = async (req, res) => {
         if (dbRes.ok) {
             const dbData = await dbRes.json();
             if (dbData.length > 0) {
-                const content = dbData[0].content.replace(/```json|```/g, '').trim();
+                const latestMessage = dbData[0].embeds && dbData[0].embeds.length > 0 
+                    ? dbData[0].embeds[0].description 
+                    : dbData[0].content;
+                const content = latestMessage.replace(/```json|```/g, '').trim();
                 const parsed = JSON.parse(content);
                 if (parsed && parsed.members) currentDB = parsed.members;
             }
@@ -234,7 +237,11 @@ module.exports = async (req, res) => {
     await fetch(`https://discord.com/api/v10/channels/${DB_CHANNEL_ID}/messages`, {
         method: 'POST',
         headers: { 'Authorization': `Bot ${DISCORD_BOT_TOKEN}`, 'Content-Type': 'application/json' },
-        body: JSON.stringify({ content: `\`\`\`json\n${messageContent}\n\`\`\`` })
+        body: JSON.stringify({ 
+            embeds: [{
+                description: `\`\`\`json\n${messageContent}\n\`\`\``
+            }]
+        })
     });
 
     return res.status(200).json({ 

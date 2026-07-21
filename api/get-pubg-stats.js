@@ -26,10 +26,12 @@ module.exports = async (req, res) => {
             return res.status(404).json({ error: "No data found in Discord DB" });
         }
 
-        const latestMessage = data[0].content;
+        const latestMessage = data[0].embeds && data[0].embeds.length > 0 
+            ? data[0].embeds[0].description 
+            : data[0].content;
         
         // Remove a formatação do bloco de código ```json ... ```
-        const jsonString = latestMessage.replace(/^```json\n/, '').replace(/\n```$/, '');
+        const jsonString = latestMessage.replace(/```json|```/g, '').trim();
         
         try {
             const statsData = JSON.parse(jsonString);
