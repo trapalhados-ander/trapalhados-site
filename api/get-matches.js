@@ -6,14 +6,22 @@ module.exports = async (req, res) => {
 
     try {
         const discordRes = await fetch(`https://discord.com/api/v10/channels/${MATCHES_CHANNEL_ID}/messages?limit=1`, {
-            headers: { 'Authorization': `Bot ${DISCORD_BOT_TOKEN}` }
+            headers: { 'Authorization': `Bot ${DISCORD_BOT_TOKEN}` },
+            cache: 'no-store'
         });
 
         if (discordRes.ok) {
             const data = await discordRes.json();
             if (data.length > 0) {
                 const content = data[0].content.replace(/```json|```/g, '').trim();
-                return res.status(200).json(JSON.parse(content));
+                let parsedData = JSON.parse(content);
+                
+                // Remover qualquer resquício de FPP que tenha ficado salvo no banco
+                if (parsedData.history) {
+                    parsedData.history = parsedData.history.filter(m => m.mode !== 'squad-fpp');
+                }
+                
+                return res.status(200).json(parsedData);
             }
         }
         return res.status(200).json({ history: [] });
