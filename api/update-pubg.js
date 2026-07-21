@@ -8,7 +8,6 @@ module.exports = async (req, res) => {
         return res.status(500).json({ error: "Faltam chaves de API na Vercel." });
     }
 
-    // 1. Buscar a lista de membros do Discord
     let SQUAD = [];
     try {
         const discordRes = await fetch(`https://discord.com/api/v10/channels/${MEMBERS_CHANNEL_ID}/messages?limit=50`, {
@@ -34,33 +33,51 @@ module.exports = async (req, res) => {
         return res.status(400).json({ error: "Nenhum membro encontrado no Discord." });
     }
 
-    // 2. Função para buscar stats reais no PUBG
-    async function getPubgPlayerStats(playerName) {
+    const stats = [];
+    const errors = [];
+
+    // Pegar IDs de todos os jogadores em Lotes de 6 (limite do PUBG)
+    const playerIds = {};
+    for (let i = 0; i < SQUAD.length; i += 6) {
+        const chunk = SQUAD.slice(i, i + 6);
+        const names = chunk.join(',');
+        
+        const playerRes = await fetch(`https://api.pubg.com/shards/steam/players?filter[playerNames]=${names}`, {
+            headers: { 'Authorization': `Bearer ${PUBG_API_KEY}`, 'Accept': 'application/vnd.api+json' }
+        });
+        
+        if (playerRes.ok) {
+            const data = await playerRes.json();
+            if (data && data.data) {
+                data.data.forEach(p => {
+                    playerIds[p.attributes.name.toLowerCase()] = p.id;
+                });
+            }
+        } else {
+            errors.push(`Erro ao buscar IDs do lote: ${names}. Status: ${playerRes.status}`);
+        }
+    }
+
+    // Buscar Stats para quem achamos ID
+    for (const player of SQUAD) {
+        const accountId = playerIds[player.toLowerCase()];
+        if (!accountId) {
+            errors.push(`Account ID não encontrado para: ${player}`);
+            continue;
+        }
+
         try {
-            // Busca o ID da conta
-            const playerRes = await fetch(`https://api.pubg.com/shards/steam/players?filter[playerNames]=${playerName}`, {
-                headers: {
-                    'Authorization': `Bearer ${PUBG_API_KEY}`,
-                    'Accept': 'application/vnd.api+json'
-                }
-            });
-            
-            if (!playerRes.ok) return null;
-            const playerData = await playerRes.json();
-            const accountId = playerData.data[0].id;
-
-            // Busca os stats vitais (Lifetime)
             const statsRes = await fetch(`https://api.pubg.com/shards/steam/players/${accountId}/seasons/lifetime`, {
-                headers: {
-                    'Authorization': `Bearer ${PUBG_API_KEY}`,
-                    'Accept': 'application/vnd.api+json'
-                }
+                headers: { 'Authorization': `Bearer ${PUBG_API_KEY}`, 'Accept': 'application/vnd.api+json' }
             });
 
-            if (!statsRes.ok) return null;
+            if (!statsRes.ok) {
+                if (statsRes.status === 429) errors.push("Rate Limit (429) excedido nas estatísticas!");
+                errors.push(`Erro ao buscar Lifetime Stats de ${player}. Status: ${statsRes.status}`);
+                continue;
+            }
+
             const statsData = await statsRes.json();
-            
-            // Calculando o KD agregado (ex: squad-fpp)
             const squadFpp = statsData.data.attributes.gameModeStats['squad-fpp'] || {};
             const kills = squadFpp.kills || 0;
             const wins = squadFpp.wins || 0;
@@ -71,74 +88,60 @@ module.exports = async (req, res) => {
             if (deaths > 0) realKd = (kills / deaths).toFixed(2);
             else if (kills > 0) realKd = kills.toFixed(2);
 
-            // A arma favorita exige buscar a masteria de armas (Weapon Mastery)
             let favWeapon = "Desconhecida";
+            
+            // Pausa rápida para tentar driblar rate limit
+            await new Promise(r => setTimeout(r, 200));
+
             const weaponRes = await fetch(`https://api.pubg.com/shards/steam/players/${accountId}/weapon_mastery`, {
-                headers: {
-                    'Authorization': `Bearer ${PUBG_API_KEY}`,
-                    'Accept': 'application/vnd.api+json'
-                }
+                headers: { 'Authorization': `Bearer ${PUBG_API_KEY}`, 'Accept': 'application/vnd.api+json' }
             });
 
             if (weaponRes.ok) {
                 const weaponData = await weaponRes.json();
                 const weapons = weaponData.data.attributes.weaponSummaries;
-                // Descobrir a arma com mais abates ou nível maior
                 let maxDefeats = -1;
                 for (const [weaponName, weaponStats] of Object.entries(weapons)) {
-                    if (weaponStats.StatsTotal.Defeats > maxDefeats) {
+                    if (weaponStats.StatsTotal && weaponStats.StatsTotal.Defeats > maxDefeats) {
                         maxDefeats = weaponStats.StatsTotal.Defeats;
                         favWeapon = weaponName.replace('Item_Weapon_', '').replace('_C', '');
                     }
                 }
+            } else if (weaponRes.status === 429) {
+                errors.push("Rate Limit (429) excedido nas armas!");
             }
-            
-            return {
-                nome: playerName,
+
+            stats.push({
+                nome: player,
                 kd: realKd,
                 arma: favWeapon
-            };
+            });
+
         } catch (error) {
-            console.error("Erro com " + playerName, error);
-            return null;
+            errors.push(`Erro interno no jogador ${player}: ${error.message}`);
         }
     }
 
-    const stats = [];
-    for (const player of SQUAD) {
-        const data = await getPubgPlayerStats(player);
-        if (data) stats.push(data);
-    }
-
-    if (stats.length === 0) {
-        return res.status(400).json({ error: "Não foi possível buscar os dados de nenhum jogador no PUBG." });
-    }
-
-    // 3. Salvar no Discord
-    const messageContent = JSON.stringify({
-        type: 'SQUAD_STATS',
-        updatedAt: new Date().toISOString(),
-        members: stats
-    });
-
-    try {
-        const discordRes = await fetch(`https://discord.com/api/v10/channels/${DB_CHANNEL_ID}/messages`, {
-            method: 'POST',
-            headers: {
-                'Authorization': `Bot ${DISCORD_BOT_TOKEN}`,
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                content: `\`\`\`json\n${messageContent}\n\`\`\``
-            })
+    // Sempre tentar salvar, mesmo se tiver poucos para não zerar o banco
+    if (stats.length > 0) {
+        const messageContent = JSON.stringify({
+            type: 'SQUAD_STATS',
+            updatedAt: new Date().toISOString(),
+            members: stats,
+            erros_da_ultima_rodada: errors
         });
 
-        if (!discordRes.ok) {
-            return res.status(discordRes.status).json({ error: "Falha ao gravar no Discord" });
-        }
-
-        return res.status(200).json({ success: true, message: "Banco de dados atualizado com estatísticas reais do PUBG!", atualizados: SQUAD.length });
-    } catch (error) {
-        return res.status(500).json({ error: "Erro interno no servidor." });
+        await fetch(`https://discord.com/api/v10/channels/${DB_CHANNEL_ID}/messages`, {
+            method: 'POST',
+            headers: { 'Authorization': `Bot ${DISCORD_BOT_TOKEN}`, 'Content-Type': 'application/json' },
+            body: JSON.stringify({ content: `\`\`\`json\n${messageContent}\n\`\`\`` })
+        });
     }
+
+    return res.status(200).json({ 
+        success: true, 
+        message: "Robô finalizou a varredura.", 
+        atualizados: stats.length, 
+        erros: errors 
+    });
 };
