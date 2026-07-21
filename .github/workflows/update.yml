@@ -9,7 +9,12 @@ jobs:
   update-db:
     runs-on: ubuntu-latest
     steps:
-      - name: Ping Vercel Update API
+      - name: Ping Vercel Update API (Player Stats)
         run: |
           curl -X GET "https://www.trapalhados.com.br/api/update-pubg"
-          echo "Banco de dados atualizado com sucesso (Lote de 2 membros)!"
+          echo "Banco de dados de jogadores atualizado (Lote de 2 membros)!"
+          
+      - name: Ping Vercel Matches API (Match History)
+        run: |
+          curl -X GET "https://www.trapalhados.com.br/api/update-matches"
+          echo "Banco de dados de partidas atualizado!"

@@ -152,7 +152,9 @@ module.exports = async (req, res) => {
                 for (const [weaponName, weaponStats] of Object.entries(weapons)) {
                     if (weaponStats.StatsTotal && weaponStats.StatsTotal.Defeats > maxDefeats) {
                         maxDefeats = weaponStats.StatsTotal.Defeats;
-                        favWeapon = weaponName.replace('Item_Weapon_', '').replace('_C', '');
+                        let cleanName = weaponName.replace('Item_Weapon_', '').replace('_C', '');
+                        if (cleanName === 'HK416') cleanName = 'M416';
+                        favWeapon = cleanName;
                     }
                 }
             }
