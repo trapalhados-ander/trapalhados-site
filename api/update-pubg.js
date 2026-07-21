@@ -26,12 +26,8 @@ module.exports = async (req, res) => {
                     if (lower.startsWith('apelido:')) apelido = line.substring(8).trim();
                 });
                 
-                // Se não tiver o campo "Apelido", usamos o próprio Nome como padrão de busca
                 if (nome) {
-                    SQUAD.push({
-                        nome: nome,
-                        apelido: apelido || nome
-                    });
+                    SQUAD.push({ nome: nome, apelido: apelido || nome });
                 }
             });
         }
@@ -59,7 +55,7 @@ module.exports = async (req, res) => {
         console.error("Erro ao ler DB", e);
     }
 
-    // 3. Identificar quais 3 membros atualizar (ordenar pelos mais antigos)
+    // 3. Identificar quais 2 membros atualizar (Lote Reduzido para Fase 2)
     let sortedSquad = SQUAD.map(member => {
         const existing = currentDB.find(m => m.nome.toLowerCase() === member.nome.toLowerCase());
         return {
@@ -70,12 +66,26 @@ module.exports = async (req, res) => {
     });
     
     sortedSquad.sort((a, b) => a.lastUpdate - b.lastUpdate);
-    const toUpdate = sortedSquad.slice(0, 3); // Pegamos os 3 objetos
+    const toUpdate = sortedSquad.slice(0, 2); 
 
     const errors = [];
     const updatedStats = [];
-    // Usamos os Apelidos (PUBG nicks) para a API
     const namesChunk = toUpdate.map(s => s.apelido).join(',');
+    
+    // Buscar Temporada Atual Ranqueada
+    let currentSeasonId = "";
+    try {
+        const seasonRes = await fetch(`https://api.pubg.com/shards/steam/seasons`, {
+            headers: { 'Authorization': `Bearer ${PUBG_API_KEY}`, 'Accept': 'application/vnd.api+json' }
+        });
+        if (seasonRes.ok) {
+            const seasonData = await seasonRes.json();
+            const currentSeason = seasonData.data.find(s => s.attributes.isCurrentSeason === true);
+            if (currentSeason) currentSeasonId = currentSeason.id;
+        }
+    } catch (e) {
+        errors.push("Erro ao buscar temporada atual.");
+    }
     
     let playerIds = {};
     const playerRes = await fetch(`https://api.pubg.com/shards/steam/players?filter[playerNames]=${namesChunk}`, {
@@ -93,15 +103,16 @@ module.exports = async (req, res) => {
         errors.push(`Erro ao buscar IDs: ${playerRes.status}`);
     }
 
-    // 4. Buscar Stats
+    // 4. Buscar Stats Avançadas (Lifetime + Ranked + Weapon)
     for (const playerObj of toUpdate) {
         const accountId = playerIds[playerObj.apelido.toLowerCase()];
         if (!accountId) {
-            errors.push(`Apelido não encontrado no PUBG Steam: ${playerObj.apelido} (Nome: ${playerObj.nome})`);
+            errors.push(`Apelido não encontrado no PUBG Steam: ${playerObj.apelido}`);
             continue;
         }
 
         try {
+            // Lifetime Stats
             const statsRes = await fetch(`https://api.pubg.com/shards/steam/players/${accountId}/seasons/lifetime`, {
                 headers: { 'Authorization': `Bearer ${PUBG_API_KEY}`, 'Accept': 'application/vnd.api+json' }
             });
@@ -121,7 +132,14 @@ module.exports = async (req, res) => {
             let realKd = "0.00";
             if (deaths > 0) realKd = (kills / deaths).toFixed(2);
             else if (kills > 0) realKd = kills.toFixed(2);
+            
+            // Novos campos do Hall da Fama
+            const longestKill = squadFpp.longestKill || 0;
+            const roundMostKills = squadFpp.roundMostKills || 0;
+            const headshotKills = squadFpp.headshotKills || 0;
+            const headshotPercent = kills > 0 ? ((headshotKills / kills) * 100).toFixed(1) : "0.0";
 
+            // Weapon Mastery
             let favWeapon = "Desconhecida";
             const weaponRes = await fetch(`https://api.pubg.com/shards/steam/players/${accountId}/weapon_mastery`, {
                 headers: { 'Authorization': `Bearer ${PUBG_API_KEY}`, 'Accept': 'application/vnd.api+json' }
@@ -138,13 +156,41 @@ module.exports = async (req, res) => {
                     }
                 }
             }
+            
+            // Ranked Stats
+            let rankTier = "Unranked";
+            let rankSubTier = "";
+            if (currentSeasonId) {
+                const rankedRes = await fetch(`https://api.pubg.com/shards/steam/players/${accountId}/seasons/${currentSeasonId}/ranked`, {
+                    headers: { 'Authorization': `Bearer ${PUBG_API_KEY}`, 'Accept': 'application/vnd.api+json' }
+                });
+                
+                if (rankedRes.ok) {
+                    const rankedData = await rankedRes.json();
+                    const rankedSquadFpp = rankedData.data.attributes.rankedGameModeStats['squad-fpp'];
+                    if (rankedSquadFpp && rankedSquadFpp.currentTier) {
+                        rankTier = rankedSquadFpp.currentTier.tier; // Ex: Gold, Platinum
+                        rankSubTier = rankedSquadFpp.currentTier.subTier; // Ex: 1, 2, 3
+                    } else {
+                        const rankedSquad = rankedData.data.attributes.rankedGameModeStats['squad'];
+                        if (rankedSquad && rankedSquad.currentTier) {
+                            rankTier = rankedSquad.currentTier.tier;
+                            rankSubTier = rankedSquad.currentTier.subTier;
+                        }
+                    }
+                }
+            }
 
-            // Salvamos com o NOME real para o site cruzar, mas mantemos o Apelido pro log
             updatedStats.push({
                 nome: playerObj.nome,
                 apelido: playerObj.apelido,
                 kd: realKd,
                 arma: favWeapon,
+                longestKill: longestKill.toFixed(1),
+                maxKills: roundMostKills,
+                headshotPercent: headshotPercent,
+                rankTier: rankTier,
+                rankSubTier: rankSubTier,
                 lastUpdate: Date.now()
             });
 
@@ -161,7 +207,6 @@ module.exports = async (req, res) => {
         else finalDB.push(newStat);
     });
     
-    // Remover quem não está mais na lista principal do Discord
     finalDB = finalDB.filter(m => SQUAD.some(s => s.nome.toLowerCase() === m.nome.toLowerCase()));
 
     // 6. Salvar no DB Channel
@@ -179,7 +224,6 @@ module.exports = async (req, res) => {
 
     return res.status(200).json({ 
         success: true, 
-        message: "Banco atualizado em lotes inteligentes!", 
         processados_agora: toUpdate.map(t => `${t.nome} -> ${t.apelido}`),
         erros_na_busca: errors,
         total_no_banco: finalDB.length

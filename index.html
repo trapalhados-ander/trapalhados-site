@@ -439,6 +439,19 @@ void main() {
         </div>
     </section>
 
+    <!-- === HALL OF FAME SECTION === -->
+    <section class="py-16 px-margin-mobile md:px-margin-desktop bg-surface-container-low/50 relative border-y border-surface-variant/30" id="hall-of-fame">
+        <div class="max-w-container-max mx-auto relative z-10">
+            <h2 class="font-headline-lg text-headline-lg text-primary uppercase mb-12 flex items-center gap-4 justify-center reveal drop-shadow-lg">
+                <span class="material-symbols-outlined text-[40px]" style="font-variation-settings: 'FILL' 1;">military_tech</span>
+                Hall da Fama
+            </h2>
+            <div id="hall-of-fame-grid" class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Preenchido via JS -->
+            </div>
+        </div>
+    </section>
+
     <!-- === ROSTER / MEMBERS SECTION (With background image) === -->
     <section class="py-32 px-margin-mobile md:px-margin-desktop bg-containers relative border-b border-surface-variant/30" id="squad">
         <div class="max-w-container-max mx-auto relative z-10">
@@ -763,6 +776,11 @@ void main() {
                     if (stats) {
                         member.kd = stats.kd;
                         member.arma = stats.arma;
+                        member.rankTier = stats.rankTier;
+                        member.rankSubTier = stats.rankSubTier;
+                        member.headshotPercent = stats.headshotPercent;
+                        member.longestKill = stats.longestKill;
+                        member.maxKills = stats.maxKills;
                     }
 
                     const bColor = borderColors[index % 3];
@@ -779,13 +797,55 @@ void main() {
                                 <h3 class="font-headline-md text-[24px] text-on-surface uppercase drop-shadow-md">${member.nome}</h3>
                                 <div class="bg-surface-variant ${tColor} font-label-sm px-2 py-1 rounded uppercase inline-block mb-4">${member.funcao}</div>
                                 <ul class="text-left font-body-md text-sm text-on-surface-variant space-y-2 w-full border-t border-surface-variant pt-4">
-                                    <li><strong class="text-on-surface">KD Real:</strong> ${member.kd}</li>
-                                    <li><strong class="text-on-surface">Arma (PUBG):</strong> ${member.arma}</li>
+                                    <li><strong class="text-on-surface">Patente:</strong> ${member.rankTier || 'Unranked'} ${member.rankSubTier || ''}</li>
+                                    <li><strong class="text-on-surface">KD Real:</strong> ${member.kd || '0.0'}</li>
+                                    <li><strong class="text-on-surface">Headshots:</strong> ${member.headshotPercent || '0.0'}%</li>
+                                    <li><strong class="text-on-surface">Maior Abate:</strong> ${member.longestKill || '0'}m</li>
+                                    <li><strong class="text-on-surface">Arma (PUBG):</strong> ${member.arma || 'Desconhecida'}</li>
                                 </ul>
                             </div>
                         </div>
                     `;
                 });
+
+                // Hall da Fama Logic
+                if (pubgStats.length > 0) {
+                    const hofGrid = document.getElementById('hall-of-fame-grid');
+                    if (hofGrid) {
+                        let sniper = pubgStats.reduce((prev, current) => (+current.longestKill > +prev.longestKill) ? current : prev, pubgStats[0]);
+                        let sanguinario = pubgStats.reduce((prev, current) => (+current.maxKills > +prev.maxKills) ? current : prev, pubgStats[0]);
+                        let preciso = pubgStats.reduce((prev, current) => (+current.headshotPercent > +prev.headshotPercent) ? current : prev, pubgStats[0]);
+
+                        const getImage = (nome) => {
+                            const m = members.find(m => m.nome.toLowerCase() === nome.toLowerCase());
+                            return m && m.imageUrl ? m.imageUrl : 'brand/Logo.png';
+                        };
+
+                        hofGrid.innerHTML = `
+                            <div class="glass-card rounded-lg p-6 text-center border-b-4 border-b-tertiary flex flex-col items-center gap-4 transform hover:scale-105 transition-transform">
+                                <span class="material-symbols-outlined text-[48px] text-tertiary">my_location</span>
+                                <h3 class="font-headline-md text-[24px] text-on-surface uppercase">O Sniper</h3>
+                                <div class="w-20 h-20 rounded-full overflow-hidden border-2 border-tertiary"><img src="${getImage(sniper.nome)}" class="w-full h-full object-cover"></div>
+                                <span class="font-label-sm text-tertiary">${sniper.nome}</span>
+                                <p class="font-body-md text-on-surface-variant text-sm mt-2">Abate mais distante: <strong class="text-on-surface">${sniper.longestKill || 0}m</strong></p>
+                            </div>
+                            <div class="glass-card rounded-lg p-6 text-center border-b-4 border-b-error flex flex-col items-center gap-4 transform hover:scale-105 transition-transform scale-105 shadow-2xl relative z-10">
+                                <span class="material-symbols-outlined text-[56px] text-error">local_fire_department</span>
+                                <h3 class="font-headline-md text-[28px] text-error uppercase">O Sanguinário</h3>
+                                <div class="w-24 h-24 rounded-full overflow-hidden border-2 border-error"><img src="${getImage(sanguinario.nome)}" class="w-full h-full object-cover"></div>
+                                <span class="font-label-sm text-error">${sanguinario.nome}</span>
+                                <p class="font-body-md text-on-surface-variant text-sm mt-2">Máximo de Kills (Partida): <strong class="text-on-surface">${sanguinario.maxKills || 0}</strong></p>
+                            </div>
+                            <div class="glass-card rounded-lg p-6 text-center border-b-4 border-b-primary flex flex-col items-center gap-4 transform hover:scale-105 transition-transform">
+                                <span class="material-symbols-outlined text-[48px] text-primary">gps_fixed</span>
+                                <h3 class="font-headline-md text-[24px] text-on-surface uppercase">O Preciso</h3>
+                                <div class="w-20 h-20 rounded-full overflow-hidden border-2 border-primary"><img src="${getImage(preciso.nome)}" class="w-full h-full object-cover"></div>
+                                <span class="font-label-sm text-primary">${preciso.nome}</span>
+                                <p class="font-body-md text-on-surface-variant text-sm mt-2">Taxa de Headshot: <strong class="text-on-surface">${preciso.headshotPercent || 0}%</strong></p>
+                            </div>
+                        `;
+                    }
+                }
                 } else {
                     grid.innerHTML = '<div class="col-span-full text-center text-on-surface-variant">Nenhum membro encontrado ou canal não configurado.</div>';
                 }
