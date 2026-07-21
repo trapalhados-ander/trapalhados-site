@@ -11,7 +11,8 @@ module.exports = async (req, res) => {
     try {
         // 1. Obter Membros e Apelidos
         const discordRes = await fetch(`https://discord.com/api/v10/channels/${MEMBERS_CHANNEL_ID}/messages?limit=50`, {
-            headers: { 'Authorization': `Bot ${DISCORD_BOT_TOKEN}` }
+            headers: { 'Authorization': `Bot ${DISCORD_BOT_TOKEN}` },
+            cache: 'no-store'
         });
         
         const SQUAD = [];
@@ -35,32 +36,47 @@ module.exports = async (req, res) => {
         const activePlayers = SQUAD.slice(0, 3).map(s => s.apelido).join(',');
 
         const pRes = await fetch(`https://api.pubg.com/shards/steam/players?filter[playerNames]=${activePlayers}`, {
-            headers: { 'Authorization': `Bearer ${PUBG_API_KEY}`, 'Accept': 'application/vnd.api+json' }
+            headers: { 'Authorization': `Bearer ${PUBG_API_KEY}`, 'Accept': 'application/vnd.api+json' },
+            cache: 'no-store'
         });
         
         if (!pRes.ok) return res.status(pRes.status).json({ error: "Erro ao buscar jogadores" });
         
         const pData = await pRes.json();
         
-        // Coletar o último Match ID do primeiro jogador que tiver partidas
-        let latestMatchId = null;
+        // Coletar os últimos Match IDs
+        let matchIdsToTry = [];
         for (const player of pData.data) {
             if (player.relationships && player.relationships.matches && player.relationships.matches.data.length > 0) {
-                latestMatchId = player.relationships.matches.data[0].id;
-                break;
+                const pMatches = player.relationships.matches.data.slice(0, 3).map(m => m.id);
+                matchIdsToTry.push(...pMatches);
             }
         }
 
-        if (!latestMatchId) return res.status(200).json({ message: "Nenhuma partida recente encontrada." });
+        if (matchIdsToTry.length === 0) return res.status(200).json({ message: "Nenhuma partida recente encontrada." });
+        
+        matchIdsToTry = [...new Set(matchIdsToTry)];
 
-        // 2. Buscar detalhes da partida
-        const mRes = await fetch(`https://api.pubg.com/shards/steam/matches/${latestMatchId}`, {
-            headers: { 'Accept': 'application/vnd.api+json' }
-        });
+        // 2. Buscar detalhes da partida até achar uma TPP ('squad')
+        let validMatchData = null;
+        for (const mId of matchIdsToTry) {
+            const mRes = await fetch(`https://api.pubg.com/shards/steam/matches/${mId}`, {
+                headers: { 'Accept': 'application/vnd.api+json' },
+                cache: 'no-store'
+            });
+            if (mRes.ok) {
+                const mData = await mRes.json();
+                if (mData.data.attributes.gameMode === 'squad') {
+                    validMatchData = mData;
+                    break;
+                }
+            }
+        }
+        
+        if (!validMatchData) return res.status(200).json({ message: "Nenhuma partida TPP recente encontrada." });
 
-        if (!mRes.ok) return res.status(mRes.status).json({ error: "Erro ao buscar partida" });
-
-        const mData = await mRes.json();
+        const mData = validMatchData;
+        const latestMatchId = mData.data.id;
         const mapName = mData.data.attributes.mapName;
         const gameMode = mData.data.attributes.gameMode;
         const createdAt = mData.data.attributes.createdAt;
@@ -130,7 +146,8 @@ module.exports = async (req, res) => {
 
         // 6. Ler histórico de partidas do Discord (para não duplicar)
         const dbRes = await fetch(`https://discord.com/api/v10/channels/${MATCHES_CHANNEL_ID}/messages?limit=1`, {
-            headers: { 'Authorization': `Bot ${DISCORD_BOT_TOKEN}` }
+            headers: { 'Authorization': `Bot ${DISCORD_BOT_TOKEN}` },
+            cache: 'no-store'
         });
         
         let history = [];
