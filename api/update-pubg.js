@@ -112,32 +112,36 @@ module.exports = async (req, res) => {
         }
 
         try {
+            let realKd = "0.00";
+            let headshotPercent = "0.0";
+            let longestKill = 0;
+            let maxKills = 0;
+
             // Lifetime Stats
             const statsRes = await fetch(`https://api.pubg.com/shards/steam/players/${accountId}/seasons/lifetime`, {
                 headers: { 'Authorization': `Bearer ${PUBG_API_KEY}`, 'Accept': 'application/vnd.api+json' }
             });
 
-            if (!statsRes.ok) {
+            if (statsRes.ok) {
+                const statsData = await statsRes.json();
+                const squadFpp = statsData.data.attributes.gameModeStats['squad-fpp'] || {};
+                const squadTpp = statsData.data.attributes.gameModeStats['squad'] || {};
+                
+                const kills = (squadFpp.kills || 0) + (squadTpp.kills || 0);
+                const wins = (squadFpp.wins || 0) + (squadTpp.wins || 0);
+                const matches = (squadFpp.roundsPlayed || 0) + (squadTpp.roundsPlayed || 0);
+                const deaths = matches - wins;
+                const headshotKills = (squadFpp.headshotKills || 0) + (squadTpp.headshotKills || 0);
+                
+                if (deaths > 0) realKd = (kills / deaths).toFixed(2);
+                else if (kills > 0) realKd = kills.toFixed(2);
+                
+                headshotPercent = kills > 0 ? ((headshotKills / kills) * 100).toFixed(1) : "0.0";
+                longestKill = Math.max(squadFpp.longestKill || 0, squadTpp.longestKill || 0);
+                maxKills = Math.max(squadFpp.roundMostKills || 0, squadTpp.roundMostKills || 0);
+            } else {
                 errors.push(`Erro Stats ${playerObj.apelido}: ${statsRes.status}`);
-                continue;
             }
-
-            const statsData = await statsRes.json();
-            const squadFpp = statsData.data.attributes.gameModeStats['squad-fpp'] || {};
-            const kills = squadFpp.kills || 0;
-            const wins = squadFpp.wins || 0;
-            const matches = squadFpp.roundsPlayed || 0;
-            const deaths = matches - wins;
-            
-            let realKd = "0.00";
-            if (deaths > 0) realKd = (kills / deaths).toFixed(2);
-            else if (kills > 0) realKd = kills.toFixed(2);
-            
-            // Novos campos do Hall da Fama
-            const longestKill = squadFpp.longestKill || 0;
-            const roundMostKills = squadFpp.roundMostKills || 0;
-            const headshotKills = squadFpp.headshotKills || 0;
-            const headshotPercent = kills > 0 ? ((headshotKills / kills) * 100).toFixed(1) : "0.0";
 
             // Weapon Mastery
             let favWeapon = "Desconhecida";
@@ -154,12 +158,13 @@ module.exports = async (req, res) => {
                         maxDefeats = weaponStats.StatsTotal.Defeats;
                         let cleanName = weaponName.replace('Item_Weapon_', '').replace('_C', '');
                         if (cleanName === 'HK416') cleanName = 'M416';
+                        if (cleanName === 'Kar98k') cleanName = 'Kar98k'; // manter outros nomes intactos
                         favWeapon = cleanName;
                     }
                 }
             }
             
-            // Ranked Stats
+            // Buscar Estatísticas Ranked
             let rankTier = "Unranked";
             let rankSubTier = "";
             if (currentSeasonId) {
@@ -169,16 +174,22 @@ module.exports = async (req, res) => {
                 
                 if (rankedRes.ok) {
                     const rankedData = await rankedRes.json();
-                    const rankedSquadFpp = rankedData.data.attributes.rankedGameModeStats['squad-fpp'];
-                    if (rankedSquadFpp && rankedSquadFpp.currentTier) {
-                        rankTier = rankedSquadFpp.currentTier.tier; // Ex: Gold, Platinum
-                        rankSubTier = rankedSquadFpp.currentTier.subTier; // Ex: 1, 2, 3
-                    } else {
-                        const rankedSquad = rankedData.data.attributes.rankedGameModeStats['squad'];
-                        if (rankedSquad && rankedSquad.currentTier) {
-                            rankTier = rankedSquad.currentTier.tier;
-                            rankSubTier = rankedSquad.currentTier.subTier;
+                    if (rankedData.data && rankedData.data.attributes && rankedData.data.attributes.rankedGameModeStats) {
+                        const rankedSquadFpp = rankedData.data.attributes.rankedGameModeStats['squad-fpp'] || {};
+                        const rankedSquadTpp = rankedData.data.attributes.rankedGameModeStats['squad'] || {};
+                        
+                        // Verificar patentes
+                        if (rankedSquadFpp.currentTier) {
+                            rankTier = rankedSquadFpp.currentTier.tier; 
+                            rankSubTier = rankedSquadFpp.currentTier.subTier;
+                        } else if (rankedSquadTpp.currentTier) {
+                            rankTier = rankedSquadTpp.currentTier.tier;
+                            rankSubTier = rankedSquadTpp.currentTier.subTier;
                         }
+
+                        // Verificar records de kills/long range na Ranked e sobrepor se for maior
+                        longestKill = Math.max(longestKill, rankedSquadFpp.longestKill || 0, rankedSquadTpp.longestKill || 0);
+                        maxKills = Math.max(maxKills, rankedSquadFpp.roundMostKills || 0, rankedSquadTpp.roundMostKills || 0);
                     }
                 }
             }
@@ -189,7 +200,7 @@ module.exports = async (req, res) => {
                 kd: realKd,
                 arma: favWeapon,
                 longestKill: longestKill.toFixed(1),
-                maxKills: roundMostKills,
+                maxKills: maxKills,
                 headshotPercent: headshotPercent,
                 rankTier: rankTier,
                 rankSubTier: rankSubTier,
